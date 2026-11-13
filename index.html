@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e17">
+<title>云锦微 VIITRIX — 为每一个物理现场，交付专属的「AI 员工」</title>
+<meta name="description" content="本地大模型＋边缘AI大脑（AGI Box）＋云端智能体工厂。已落地 10000+ 物理现场，数据 100% 不出域。说一句，它就在现场干活。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="云锦微 VIITRIX — 为每一个物理现场，交付专属的「AI 员工」">
+<meta property="og:description" content="本地大模型＋边缘AI大脑（AGI Box）＋云端智能体工厂。已落地 10000+ 物理现场，数据 100% 不出域。">
+<meta property="og:image" content="images/scene-industrial.jpg">
+<meta property="og:locale" content="zh_CN">
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="css/styles.css?v=20261110b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "云锦微 VIITRIX",
+  "url": "https://www.viitrix.com/",
+  "logo": "https://www.viitrix.com/images/logo.png",
+  "description": "本地大模型＋边缘AI大脑（AGI Box）＋云端智能体工厂，为物理现场交付专属 AI 员工。",
+  "address": [
+    {
+      "@type": "PostalAddress",
+      "addressCountry": "CN",
+      "addressRegion": "上海市",
+      "addressLocality": "上海",
+      "streetAddress": "丹桂路799号张江国创中心三期5号楼 浙江大学上海高等研究院3楼"
+    },
+    {
+      "@type": "PostalAddress",
+      "addressCountry": "CN",
+      "addressRegion": "浙江省",
+      "addressLocality": "宁波",
+      "streetAddress": "余姚市俞家桥路131号4层C04-C05室"
+    },
+    {
+      "@type": "PostalAddress",
+      "addressCountry": "CN",
+      "addressRegion": "广东省",
+      "addressLocality": "深圳",
+      "streetAddress": "南山区清华信息港科研楼8楼804室"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- ===================== 导航 ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img class="nav-logo-img" src="images/logo.png" alt="云锦微 VIITRIX">
+    </a>
+
+    <nav class="nav-links" aria-label="主导航">
+      <a href="index.html" class="is-current" aria-current="page">首页</a>
+      <a href="investor-mamgpt.html">MaM-GPT 世界模型</a>
+      <a href="investor-abyss.html">深渊矩阵·海洋具身智能</a>
+      <a href="customer-agibox.html">AGI Box 物理AI边缘大脑</a>
+      <a href="scenarios.html">落地场景</a>
+      <a href="about.html">关于我们</a>
+      <a href="contact.html">联系我们</a>
+    </nav>
+
+    <button class="nav-theme" id="theme-toggle-btn" aria-label="切换主题" title="切换主题">
+      <svg id="theme-icon-dark" class="theme-ico" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+      </svg>
+      <svg id="theme-icon-light" class="theme-ico is-hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+    </button>
+
+    <button class="nav-toggle" id="navToggle" aria-label="展开菜单" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nav-mobile" id="navMobile">
+    <div class="container">
+      <a href="index.html" class="is-current" aria-current="page">首页</a>
+      <a href="investor-mamgpt.html">MaM-GPT 世界模型</a>
+      <a href="investor-abyss.html">深渊矩阵·海洋具身智能</a>
+      <a href="customer-agibox.html">AGI Box 物理AI边缘大脑</a>
+      <a href="scenarios.html">落地场景</a>
+      <a href="about.html">关于我们</a>
+      <a href="contact.html">联系我们</a>
+      <button class="nav-mobile-theme" id="mobile-theme-toggle">
+        <svg id="mobile-theme-icon-dark" class="theme-ico" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+        </svg>
+        <svg id="mobile-theme-icon-light" class="theme-ico is-hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+        <span>切换主题</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== H1 Hero ===================== -->
+<section class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="hero-head">
+        <span class="hero-decor" aria-hidden="true"></span>
+        <p class="eyebrow">Intel 端侧 AI 战略合作伙伴</p>
+        <h1 class="hero-title">为每一个物理现场，<br>交付专属的「AI 员工」</h1>
+
+      <p class="hero-result">说一句，它就在现场干活。</p>
+
+      <p class="hero-sub">一台盒子进现场，按员工数订阅。</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong class="num">10000+</strong>
+          <span>落地现场</span>
+        </div>
+        <div class="hero-stat">
+          <strong class="num">5 个</strong>
+          <span>AI 岗位已落地</span>
+        </div>
+        <div class="hero-stat">
+          <strong class="num">100%</strong>
+          <span>数据不出域</span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-open-modal>免费生成一个试试 →</button>
+        <a class="btn btn-ghost" href="#demo">看它怎么干活 ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-visual-wrap">
+      <div class="hero-visual" id="hero-visual" aria-label="三类现场智能体分层解析演示">
+        <div class="hv-stage" id="hvStage"></div>
+      </div>
+      <div class="hv-dots" id="hvDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 信任条 ===================== -->
+<section class="trustbar">
+  <div class="container trustbar-inner">
+    <div class="trustbar-logos">
+      <img src="images/partners/partner-1.png" alt="浙江大学" loading="lazy">
+      <img src="images/partners/partner-2.png" alt="交通部上海海图中心" loading="lazy">
+      <img src="images/partners/partner-3.png" alt="Intel" loading="lazy">
+    </div>
+    <p class="trustbar-note">与以上机构深度合作</p>
+  </div>
+</section>
+
+<!-- ===================== H2 演示区 ===================== -->
+<section class="section" id="demo">
+  <div class="container">
+    <div class="demo-head">
+      <h2 class="h2">从一句话，到一个能跑的智能体。</h2>
+      <p class="demo-badge">内测版 · 首批开放 10 个试点名额</p>
+    </div>
+
+    <div class="demo-tabs" role="tablist" aria-label="生成步骤">
+      <button class="demo-tab is-active" role="tab" aria-selected="true" data-step="0">
+        <span class="tab-n">01</span><span class="tab-t">说</span><span class="tab-d">一句话</span><span class="tab-bar"></span>
+      </button>
+      <button class="demo-tab" role="tab" aria-selected="false" data-step="1">
+        <span class="tab-n">02</span><span class="tab-t">问</span><span class="tab-d">它反问</span><span class="tab-bar"></span>
+      </button>
+      <button class="demo-tab" role="tab" aria-selected="false" data-step="2">
+        <span class="tab-n">03</span><span class="tab-t">选</span><span class="tab-d">点一下</span><span class="tab-bar"></span>
+      </button>
+      <button class="demo-tab" role="tab" aria-selected="false" data-step="3">
+        <span class="tab-n">04</span><span class="tab-t">做</span><span class="tab-d">自动生成</span><span class="tab-bar"></span>
+      </button>
+      <button class="demo-tab" role="tab" aria-selected="false" data-step="4">
+        <span class="tab-n">05</span><span class="tab-t">跑</span><span class="tab-d">现场验证</span><span class="tab-bar"></span>
+      </button>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-media" id="demoMedia">
+        <img id="demoShot" src="images/01-idle.png" alt="智能体工厂操作画面：说">
+        <video id="demoVideo" muted playsinline preload="none" hidden></video>
+      </div>
+
+      <div class="demo-side">
+        <div class="demo-card">
+          <div class="demo-step-no" id="demoNo">STEP 01 / 05</div>
+          <h3 id="demoTitle">一句话说清你要什么</h3>
+
+          <div class="demo-row">
+            <div class="demo-row-label">产出</div>
+            <p id="demoDesc">一条需求，不用填表。它先把你说的压成一句，再往下走。</p>
+          </div>
+        </div>
+
+        <div class="demo-side-foot">
+          <button class="btn btn-ghost" data-open-film>看完整 52 秒</button>
+          <button class="btn btn-primary" data-open-modal>免费生成一个试试</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== H3 三笔账 ===================== -->
+<section class="section ledger" id="ledger">
+  <div class="container">
+    <div class="ledger-head">
+      <h2 class="h2">买不起、养不起、没人会干</h2>
+    </div>
+
+    <div class="ledger-grid">
+      <div class="ledger-row">
+        <div class="bill">
+          <div class="bill-cap">外包开发报价</div>
+          <ul class="bill-lines">
+            <li><span>需求梳理</span><b>3 周</b></li>
+            <li><span>定制开发</span><b>8 周</b></li>
+            <li><span>验收返工</span><b>视情况</b></li>
+          </ul>
+          
+          <div class="bill-stamp">作废</div>
+        </div>
+        <div class="ledger-say">
+          <h3><em>买不起</em></h3>
+          <p>大白话自己生成，不用几十万请外包</p>
+        </div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="bill">
+          <div class="bill-cap">云服务月账单</div>
+          <ul class="bill-lines">
+            <li><span>算力租用</span><b>按月扣</b></li>
+            <li><span>推理调用</span><b>按次计</b></li>
+            <li><span>停服风险</span><b>说不准</b></li>
+          </ul>
+          
+          <div class="bill-stamp">作废</div>
+        </div>
+        <div class="ledger-say">
+          <h3><em>养不起</em></h3>
+          <p>一次买断，本地推理，不交云端算力月租</p>
+        </div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="bill">
+          <div class="bill-cap">运维人力成本</div>
+          <ul class="bill-lines">
+            <li><span>招一个算法工程师</span><b>3 个月</b></li>
+            <li><span>攒够行业 know-how</span><b>1 年</b></li>
+            <li><span>他离职重招</span><b>从头来</b></li>
+          </ul>
+          
+          <div class="bill-stamp">作废</div>
+        </div>
+        <div class="ledger-say">
+          <h3><em>没人会干</em></h3>
+          <p>部署归当地伙伴，我们分文不取</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== H4 三位一体 ===================== -->
+<section class="section" id="stack">
+  <div class="container">
+    <div class="stack-head">
+      <h2 class="h2">本地大模型 ＋ 边缘 AI 大脑 ＋ 云端智能体工厂</h2>
+      <p class="stack-lede">模型、算力、接口封在一个盒子里，插电即用。数据不出厂门，断网照常干活。</p>
+    </div>
+
+    <div class="stack-grid">
+      <article class="stack-card">
+        <div class="sc-visual sc-model">
+          <svg viewBox="0 0 400 145" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="slabTop" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3DD6D0" stop-opacity=".30"/>
+                <stop offset="1" stop-color="#3DD6D0" stop-opacity=".04"/>
+              </linearGradient>
+              <linearGradient id="slab2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3DD6D0" stop-opacity=".12"/>
+                <stop offset="1" stop-color="#3DD6D0" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(12 16)">
+              <polygon points="4,84 156,84 171,98 19,98" fill="#111823" stroke="#33415A" stroke-width="1" opacity=".5"/>
+              <polygon points="4,68 156,68 171,82 19,82" fill="#131B27" stroke="#3A4A64" stroke-width="1" opacity=".65"/>
+              <polygon points="4,52 156,52 171,66 19,66" fill="#16202E" stroke="#42536F" stroke-width="1" opacity=".8"/>
+              <polygon points="4,36 156,36 171,50 19,50" fill="#192736" stroke="#4C6080" stroke-width="1"/>
+              <polygon points="4,20 156,20 171,34 19,34" fill="url(#slab2)" stroke="#3DD6D0" stroke-width="1" stroke-opacity=".5"/>
+              <polygon points="4,4 156,4 171,18 19,18" fill="url(#slabTop)" stroke="#3DD6D0" stroke-width="1.4"/>
+              <ellipse cx="87" cy="11" rx="40" ry="4.5" fill="#3DD6D0" opacity=".2"/>
+            </g>
+            <text x="200" y="76" fill="#FF6B35" font-size="34" font-weight="700" letter-spacing="-0.6">27B</text>
+            <text x="202" y="93" fill="#6B7280" font-size="10" letter-spacing=".08em">本地参数</text>
+            <text x="12" y="136" fill="#8B94A3" font-size="12" letter-spacing=".12em">model layers</text>
+          </svg>
+        </div>
+        <div class="sc-body">
+          <h3>本地大模型</h3>
+          <p>模型权重随盒子一起进场，推理全在本地。</p>
+          <a href="investor-mamgpt.html">看参数 →</a>
+        </div>
+      </article>
+
+      <article class="stack-card">
+        <div class="sc-visual sc-box">
+          <img src="images/products/agibox-thumb.png" alt="AGI Box 边缘 AI 大脑">
+          <span class="sc-cap">agi box · edge</span>
+        </div>
+        <div class="sc-body">
+          <h3>边缘 AI 大脑</h3>
+          <p>数据 100% 不出域，一次买断，6 款国产芯片已适配。</p>
+          <a href="customer-agibox.html">看选型 →</a>
+        </div>
+      </article>
+
+      <article class="stack-card">
+        <div class="sc-visual sc-platform">
+          <img src="images/01-idle.png" alt="工厂界面">
+          <span class="sc-cap">agent factory</span>
+        </div>
+        <div class="sc-body">
+          <h3>云端智能体工厂</h3>
+          <p>一句话生成 AI 员工，先试岗后录用。</p>
+          <a href="#lead-modal" data-open-modal>申请体验 →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- ===================== H5 三类员工 ===================== -->
+<section class="section" id="proof">
+  <div class="container">
+    <div class="proof-head">
+      <h2 class="h2">5 个岗位，已经在现场跑</h2>
+      <p class="proof-lede">巡检、瞭望、审图、海图、门店 —— 每一个都有真人在用</p>
+    </div>
+
+    <div class="proof-cats">
+      <article class="proof-cat">
+        <div class="pc-head">
+          <b class="pc-name type-monitor">现场巡检</b>
+        </div>
+        <ul class="pc-list">
+          <li class="proof-item">
+            <span class="pi-num">01</span>
+            <div class="pi-main">
+              <h3>AI 巡检员</h3>
+              <p>设备测点 24 小时盯防 · 轴承类故障提前 7–15 天预警 · 拒过误报</p>
+              <a class="pi-act" href="videos/proof-1.mp4" target="_blank" rel="noopener">了解详情 →</a>
+            </div>
+          </li>
+          <li class="proof-item">
+            <span class="pi-num">02</span>
+            <div class="pi-main">
+              <h3>AI 大副</h3>
+              <p>瞭望辅助 · 锚地一句话圈定 · 偏航即提醒</p>
+              <a class="pi-act" href="videos/proof-2.mp4" target="_blank" rel="noopener">观看演示视频 →</a>
+            </div>
+          </li>
+        </ul>
+        <div class="pc-ghost">持续上岗中</div>
+      </article>
+
+      <article class="proof-cat">
+        <div class="pc-head">
+          <b class="pc-name type-knowledge">图纸与海图</b>
+        </div>
+        <ul class="pc-list">
+          <li class="proof-item">
+            <span class="pi-num">03</span>
+            <div class="pi-main">
+              <h3>AI 审图员</h3>
+              <p>人防/消防图纸秒级过规则 · 锚固长度、配筋率逐项复核 · 异议处直接标注</p>
+              <a class="pi-act" href="videos/proof-3.mp4" target="_blank" rel="noopener">观看演示视频 →</a>
+            </div>
+          </li>
+          <li class="proof-item">
+            <span class="pi-num">04</span>
+            <div class="pi-main">
+              <h3>AI 海图精灵</h3>
+              <p>海图要素识别 · 航线规划问答 · 可追问“最近锚地在哪”</p>
+              <a class="pi-act" href="videos/proof-4.mp4" target="_blank" rel="noopener">观看演示视频 →</a>
+            </div>
+          </li>
+        </ul>
+        <div class="pc-ghost">持续上岗中</div>
+      </article>
+
+      <article class="proof-cat">
+        <div class="pc-head">
+          <b class="pc-name type-create">门店运营</b>
+        </div>
+        <ul class="pc-list">
+          <li class="proof-item">
+            <span class="pi-num">05</span>
+            <div class="pi-main">
+              <h3>门店营销智能体</h3>
+              <p>门店宣传视频，一张图即可生成</p>
+              <a class="pi-act" href="videos/proof-5.mp4" target="_blank" rel="noopener">观看演示视频 →</a>
+            </div>
+          </li>
+        </ul>
+        <div class="pc-ghost">持续上岗中</div>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- ===================== 联系区块 ===================== -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <h2 class="h2">联系我们</h2>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>上海</h3>
+        <address>上海市丹桂路799号张江国创中心三期5号楼 浙江大学上海高等研究院3楼</address>
+        <div class="contact-lines">
+          <p><span>销售：</span>池先生 <a href="tel:13701877863">13701877863</a><span class="sep">|</span><a href="mailto:chiwenzhe@viitrix.com">chiwenzhe@viitrix.com</a></p>
+          <p><span>商务：</span>仪先生 <a href="tel:13923788655">13923788655</a><span class="sep">|</span><a href="mailto:yihaibo@viitrix.com">yihaibo@viitrix.com</a></p>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h3>宁波</h3>
+        <address>宁波市余姚市俞家桥路131号4层C04-C05室</address>
+        <div class="contact-lines">
+          <p><span>销售：</span>池先生 <a href="tel:13701877863">13701877863</a><span class="sep">|</span><a href="mailto:chiwenzhe@viitrix.com">chiwenzhe@viitrix.com</a></p>
+          <p><span>商务：</span>仪先生 <a href="tel:13923788655">13923788655</a><span class="sep">|</span><a href="mailto:yihaibo@viitrix.com">yihaibo@viitrix.com</a></p>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h3>深圳</h3>
+        <address>深圳市南山区清华信息港科研楼8楼804室</address>
+        <div class="contact-lines">
+          <p><span>销售：</span>胡先生 <a href="tel:19613007398">19613007398</a><span class="sep">|</span><a href="mailto:hudi@viitrix.com">hudi@viitrix.com</a></p>
+          <p><span>商务：</span>仪先生 <a href="tel:13923788655">13923788655</a><span class="sep">|</span><a href="mailto:yihaibo@viitrix.com">yihaibo@viitrix.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== 页脚 ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="云锦微 VIITRIX" style="height:28px;width:auto;">
+        <p>给物理世界造 AI 大脑</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>快速链接</h4>
+        <ul>
+          <li><a href="customer-agibox.html">产品</a></li>
+          <li><a href="investor-mamgpt.html">技术</a></li>
+          <li><a href="scenarios.html">场景</a></li>
+          <li><a href="about.html">关于</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>体验入口</h4>
+        <ul>
+          <li><a href="zn-claw.html">体验 AGI Box·通用视觉智能体</a></li>
+          <li><a href="yinian.html">体验 AGI Box·陪伴智能体</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>法律信息</h4>
+        <ul>
+          <li><span>隐私政策</span></li>
+          <li><span>服务条款</span></li>
+          <li><span>Cookie 设置</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 云锦微VIITRIX 保留所有权利</span>
+      <span>上海 · 宁波 · 深圳</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== 留资弹窗 ===================== -->
+<div class="modal" id="lead-modal" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+    <div class="modal-mask" data-close-modal></div>
+
+    <div class="modal-dialog modal-qr">
+      <button class="modal-close" data-close-modal aria-label="关闭">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <h3 id="leadTitle">加商务微信，直接聊你的现场</h3>
+      <p class="modal-desc">扫码添加，备注「现场 + 行业」。工作时间内回复，先聊你的现场，再谈试岗。</p>
+
+      <div class="qr-box">
+        <img src="images/qrcode-wechat-business.png" alt="云锦微商务微信二维码" width="248" height="248">
+      </div>
+
+      <p class="qr-note">不方便扫码？先看看 <a href="#demo" data-close-modal>它怎么干活</a>，回头再来找我们。</p>
+    </div>
+  </div>
+
+  <!-- ===================== 视频弹窗 ===================== -->
+  <div class="modal" id="film-modal" role="dialog" aria-modal="true" aria-labelledby="filmTitle">
+    <div class="modal-mask" data-close-film></div>
+
+    <div class="modal-dialog modal-film">
+      <button class="modal-close" data-close-film aria-label="关闭">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div class="film-head">
+        <h3 id="filmTitle">从一句话，到一个能跑的智能体</h3>
+        <span>52 秒 · 全程实录</span>
+      </div>
+
+      <div class="film-box">
+        <video id="filmPlayer" controls playsinline preload="metadata" poster="images/25-try-done.png">
+          <source src="videos/film-52s.mp4" type="video/mp4">
+          你的浏览器不支持视频播放。
+        </video>
+      </div>
+
+      <p class="film-note">片子里出现的界面、进度和结果都是真实跑出来的，没有剪辑拼接。</p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 导航 ---------- */
+  var nav = document.getElementById('nav');
+  var navToggle = document.getElementById('navToggle');
+  var navMobile = document.getElementById('navMobile');
+
+  function onScroll() {
+    nav.classList.toggle('is-stuck', window.scrollY > 24);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  navToggle.addEventListener('click', function () {
+    var open = navMobile.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  navMobile.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      navMobile.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  /* ---------- H1 三场景分层抽离（照片 → 粒子取数 → 检出 → 字段 → 员工） ---------- */
+  var HV_CFG = [
+    {
+      img: 'images/scene-industrial.jpg', op: '50% 50%', c: '#FF6B35',
+      alt: '工业现场车间俯瞰',
+      frames: [
+        { x: 10, y: 24, w: 22, h: 40, label: '配电柜 A3', sub: '在位 · 置信 0.94' },
+        { x: 32, y: 22, w: 14, h: 22, label: '气泵 B1', sub: '读数 0.62 MPa' },
+        { x: 63, y: 12, w: 19, h: 30, label: '消防栓 D1', sub: '画面模糊 · 待重拍', dim: true }
+      ],
+      fieldsTitle: '本班巡检 · 结构化',
+      fields: [['点位', '6'], ['覆盖', '4'], ['需重拍', '1']],
+      agent: {
+        name: '工业智能体 · 在岗', st: '运行中',
+        lines: [['已巡检', '1,204 测点'], ['预警', '1 处已推送'], ['本班结论', '可直接补拍']]
+      }
+    },
+    {
+      img: 'images/scene-cad.jpg', op: '50% 30%', c: '#00D4FF',
+      alt: '人防图纸审图画面',
+      frames: [
+        { x: 30, y: 8, w: 26, h: 26, label: '梁柱节点', sub: '箍筋间距 100' },
+        { x: 60, y: 16, w: 24, h: 34, label: '1-1 剖面', sub: '标注不全 · 待确认', dim: true },
+        { x: 4, y: 30, w: 26, h: 34, label: '门框墙详图', sub: '配筋 4Φ16 · 合规' },
+        { x: 4, y: 74, w: 20, h: 18, label: '锚入长度', sub: '≥ 0.4LaF · 够' }
+      ],
+      fieldsTitle: '待复核 7',
+      fields: [['图纸', '人防结施'], ['构件', '128 个'], ['异议', '7 处'], ['版本', 'V3 · 2026-11']],
+      agent: {
+        name: '审图智能体 · 在岗', st: '运行中',
+        lines: [['已审构件', '128 个'], ['提出问题', '7 处'], ['本图结论', '可出图']]
+      }
+    },
+    {
+      img: 'images/scene-marine.jpg', op: '100% 50%', c: '#FFB300',
+      alt: '海洋船舶驾驶台黄昏',
+      frames: [
+        { x: 66, y: 44, w: 31, h: 26, label: '电子海图', sub: '航迹偏右 40m' },
+        { x: 34, y: 25, w: 46, h: 25, label: '来船', sub: '距离 0.8 海里' },
+        { x: 0, y: 62, w: 27, h: 23, label: '操舵台', sub: '舵角 2° · 手操' }
+      ],
+      fieldsTitle: '最近来船 0.8 海里',
+      fields: [['航段', '锚地进港'], ['能见度', '6 海里'], ['偏航', '1 处'], ['班次', '18:00 - 24:00']],
+      agent: {
+        name: '大副智能体 · 在岗', st: '运行中',
+        lines: [['已记航行', '本轮 46 条'], ['提醒', '1 处偏航'], ['本班结论', '保持手操']]
+      }
+    }
+  ];
+
+  var hvStage = document.getElementById('hvStage');
+  var hvScenes = [];
+  var hvIndex = 0;
+  var hvStatic = false;
+  var hvTimers = [];
+
+  function hvLater(fn, ms) { hvTimers.push(window.setTimeout(fn, ms)); }
+  function hvClear() { hvTimers.forEach(window.clearTimeout); hvTimers = []; }
+
+  function hvIsStatic() {
+    return window.matchMedia('(max-width: 767px), (prefers-reduced-motion: reduce)').matches;
+  }
+
+  function hvBuild() {
+    if (!hvStage) return;
+    var html = '';
+
+    HV_CFG.forEach(function (s, i) {
+      html += '<div class="hv-scene' + (i === 0 ? ' is-on' : '') + '" data-i="' + i + '" style="--sc:' + s.c + '">';
+      html += '<div class="hv-layer hv-photo"><img src="' + s.img + '" alt="' + s.alt + '" loading="' + (i ? 'lazy' : 'eager') + '" style="object-position:' + s.op + '"></div>';
+      html += '<canvas class="hv-layer hv-parts"></canvas>';
+
+      html += '<div class="hv-layer hv-frames">';
+      s.frames.forEach(function (f) {
+        var cls = 'hv-frm' + (f.dim ? ' is-dim' : '') + (f.x > 54 ? ' is-right' : '');
+        html += '<div class="' + cls + '" style="left:' + f.x + '%;top:' + f.y + '%;width:' + f.w + '%;height:' + f.h + '%">' +
+          '<b>' + f.label + '</b><i>' + f.sub + '</i></div>';
+      });
+      html += '</div>';
+
+      html += '<div class="hv-layer hv-fields"><div class="hv-fld"><em>' + s.fieldsTitle + '</em>';
+      s.fields.forEach(function (f) {
+        html += '<span>' + f[0] + '<b>' + f[1] + '</b></span>';
+      });
+      html += '</div></div>';
+
+      html += '<div class="hv-layer hv-agent"><div class="hv-agent-card">' +
+        '<div class="hv-ah"><i></i><span class="nm">' + s.agent.name + '</span><span class="st">' + s.agent.st + '</span></div>';
+      s.agent.lines.forEach(function (l, k) {
+        html += '<div class="hv-al' + (k === 1 ? ' bad' : '') + '"><span>' + l[0] + '</span><b>' + l[1] + '</b></div>';
+      });
+      html += '</div></div>';
+
+      html += '</div>';
+    });
+
+    hvStage.innerHTML = html;
+    hvScenes = Array.prototype.slice.call(hvStage.querySelectorAll('.hv-scene'));
+  }
+
+  function hvBuildParts(scene, cfg) {
+    var cv = scene.querySelector('.hv-parts');
+    var box = hvStage.getBoundingClientRect();
+    var w = Math.max(1, box.width);
+    var h = Math.max(1, box.height);
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var targets = cfg.frames.map(function (f) {
+      return { x: (f.x + f.w / 2) / 100 * w, y: (f.y + f.h / 2) / 100 * h };
+    });
+
+    var parts = [];
+    for (var i = 0; i < 420; i++) {
+      var px = Math.random() * w;
+      var py = Math.random() * h;
+      var best = targets[0];
+      var bd = Infinity;
+
+      targets.forEach(function (t) {
+        var d = (t.x - px) * (t.x - px) + (t.y - py) * (t.y - py);
+        if (d < bd) { bd = d; best = t; }
+      });
+
+      parts.push({
+        x0: px, y0: py, x: px, y: py,
+        tx: best.x + (Math.random() - .5) * 34,
+        ty: best.y + (Math.random() - .5) * 34,
+        on: false, p: 0, life: 0,
+        r: 1 + Math.random() * 1.4
+      });
+    }
+
+    scene._ctx = ctx;
+    scene._w = w;
+    scene._h = h;
+    scene._parts = parts;
+    scene._sc = cfg.c;
+  }
+
+  function hvPlayParts(scene) {
+    var ctx = scene._ctx;
+    if (!ctx) return;
+
+    var w = scene._w;
+    var h = scene._h;
+    var ps = scene._parts;
+    var color = scene._sc;
+    var t0 = performance.now();
+
+    cancelAnimationFrame(scene._raf);
+
+    function step(now) {
+      var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, w, h);
+
+      var sy = h - (t / 1.05) * h * 1.25;
+
+      if (sy > -70 && sy < h + 70) {
+        var g = ctx.createLinearGradient(0, sy - 46, 0, sy + 4);
+        g.addColorStop(0, 'rgba(255,255,255,0)');
+        g.addColorStop(1, color + '38');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, sy - 46, w, 50);
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = .78;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(0, sy);
+        ctx.lineTo(w, sy);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      ps.forEach(function (p) {
+        if (!p.on && p.y0 > sy) p.on = true;
+
+        if (p.on) {
+          p.p = Math.min(1, p.p + 0.018);
+          var e = 1 - Math.pow(1 - p.p, 3);
+          p.x = p.x0 + (p.tx - p.x0) * e;
+          p.y = p.y0 + (p.ty - p.y0) * e;
+          p.life = Math.max(0, 1 - Math.max(0, (t - 1.25) / 1.0));
+          ctx.globalAlpha = p.life * .92;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+          ctx.fill();
+        }
+      });
+
+      ctx.globalAlpha = 1;
+
+      if (t < 2.35) {
+        scene._raf = requestAnimationFrame(step);
+      } else {
+        ctx.clearRect(0, 0, w, h);
+      }
+    }
+
+    scene._raf = requestAnimationFrame(step);
+  }
+
+  function hvRun() {
+    hvClear();
+    if (!hvScenes.length) return;
+
+    hvScenes.forEach(function (el, i) {
+      el.classList.toggle('is-on', i === hvIndex);
+    });
+
+    var hvDotsEl = document.getElementById('hvDots');
+    if (hvDotsEl) {
+      Array.prototype.forEach.call(hvDotsEl.querySelectorAll('button'), function (x, i) {
+        x.classList.toggle('is-on', i === hvIndex);
+      });
+    }
+
+    var scene = hvScenes[hvIndex];
+    var cfg = HV_CFG[hvIndex];
+    var frames = scene.querySelector('.hv-frames');
+    var fields = scene.querySelector('.hv-fields');
+    var agentEl = scene.querySelector('.hv-agent');
+    var boxes = Array.prototype.slice.call(scene.querySelectorAll('.hv-frm'));
+
+    hvStage.classList.remove('is-open');
+    hvStage.style.transition = 'none';
+    void hvStage.offsetWidth;
+    hvStage.style.transition = '';
+    frames.classList.remove('is-on');
+    fields.classList.remove('is-on');
+    agentEl.classList.remove('is-on');
+    boxes.forEach(function (b) { b.classList.remove('is-lit'); });
+
+    hvBuildParts(scene, cfg);
+
+    if (hvStatic) {
+      hvStage.classList.add('is-open');
+      frames.classList.add('is-on');
+      fields.classList.add('is-on');
+      agentEl.classList.add('is-on');
+      boxes.forEach(function (b) { b.classList.add('is-lit'); });
+      return;
+    }
+
+    hvLater(function () { hvStage.classList.add('is-open'); }, 50);
+    hvLater(function () { hvPlayParts(scene); }, 110);
+    hvLater(function () { frames.classList.add('is-on'); }, 360);
+    boxes.forEach(function (b, i) {
+      hvLater(function () { b.classList.add('is-lit'); }, 360 + i * 85);
+    });
+    hvLater(function () { fields.classList.add('is-on'); }, 620);
+    hvLater(function () { agentEl.classList.add('is-on'); }, 760);
+    hvLater(function () {
+      hvIndex = (hvIndex + 1) % hvScenes.length;
+      hvRun();
+    }, 6000);
+  }
+
+  if (hvStage) {
+    hvBuild();
+    hvStatic = hvIsStatic();
+
+    var hvDots = document.getElementById('hvDots');
+    var hvNames = ['工业现场', '人防图纸', '船载大副'];
+    if (hvDots) {
+      hvDots.innerHTML = hvNames.map(function (n, i) {
+        return '<button type="button" data-hv="' + i + '"' + (i === 0 ? ' class="is-on"' : '') + '>' +
+          '<i></i>' + n + '</button>';
+      }).join('');
+      hvDots.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('button[data-hv]') : null;
+        if (!b) return;
+        hvIndex = Number(b.getAttribute('data-hv'));
+        hvDots.querySelectorAll('button').forEach(function (x, i) {
+          x.classList.toggle('is-on', i === hvIndex);
+        });
+        hvRun();
+      });
+    }
+
+    hvRun();
+
+    var hvResizeTimer;
+    window.addEventListener('resize', function () {
+      window.clearTimeout(hvResizeTimer);
+      hvResizeTimer = window.setTimeout(function () {
+        hvRun();
+      }, 240);
+    });
+  }
+
+  /* ---------- H2 演示区 ---------- */
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  var STEPS = [
+    { k: '说', t: '一句话说清你要什么', d: '一条需求，不用填表。它先把你说的压成一句，再往下走。', m: '约 40 秒', poster: 'images/01-idle.png', src: 'videos/01-say.mp4' },
+    { k: '问', t: '拿不准的地方，它只问一个', d: '一轮问答，一次只问一个关键点。你回一句就行。', m: '约 1 分钟', poster: 'images/05-reply-first.png', src: 'videos/02-ask.mp4' },
+    { k: '选', t: '拿不准的，你点一个', d: '它把可能性摆成几行，你点一下，它就往下走。', m: '约 10 秒', poster: 'images/13-platform.png', src: 'videos/03-pick.mp4' },
+    { k: '做', t: '它真的在做，不是假进度', d: '进度条下面写着：正在读取真实输出。不是转圈动画。', m: '约 9 分钟', poster: 'images/17-progress-12.png', src: 'videos/04-build.mp4' },
+    { k: '跑', t: '出来的是能运行的程序，不是文档', d: '三段清单：需重拍、未覆盖、待确认。拿来就能用。', m: '立即可用', poster: 'images/25-try-done.png', src: 'videos/05-run.mp4' }
+  ];
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.demo-tab'));
+  var media = document.getElementById('demoMedia');
+  var shot = document.getElementById('demoShot');
+  var video = document.getElementById('demoVideo');
+  var noEl = document.getElementById('demoNo');
+  var titleEl = document.getElementById('demoTitle');
+  var descEl = document.getElementById('demoDesc');
+  var active = 0;
+
+  function playVideo(src) {
+    if (!src) return;
+    video.hidden = false;
+    video.classList.remove('is-ready');
+    video.onloadeddata = function () {
+      video.classList.add('is-ready');
+      var p = video.play();
+      if (p && p.catch) p.catch(function () {});
+    };
+    video.onerror = function () {
+      video.hidden = true;
+      video.classList.remove('is-ready');
+    };
+    video.src = src;
+    video.load();
+  }
+
+  function selectStep(i) {
+    active = i;
+    var s = STEPS[i];
+
+    tabs.forEach(function (t, idx) {
+      var on = idx === i;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', String(on));
+      var bar = t.querySelector('.tab-bar');
+      if (bar && !on) bar.style.width = '0';
+    });
+
+    media.classList.add('is-switching');
+    window.setTimeout(function () {
+      shot.src = s.poster;
+      shot.alt = '智能体工厂操作画面：' + s.k;
+      noEl.textContent = 'STEP ' + pad(i + 1) + ' / ' + pad(STEPS.length);
+      titleEl.textContent = s.t;
+      descEl.textContent = s.d;
+      playVideo(s.src);
+      media.classList.remove('is-switching');
+    }, 120);
+  }
+
+  // 进度条：跟着当前段的播放位置走
+  video.addEventListener('timeupdate', function () {
+    var bar = tabs[active] && tabs[active].querySelector('.tab-bar');
+    if (!bar) return;
+    var d = video.duration;
+    bar.style.width = (d && isFinite(d) ? Math.min(video.currentTime / d, 1) * 100 : 0) + '%';
+  });
+
+  // 本段播完自动进下一段，最后一段播完回到第一段
+  video.addEventListener('ended', function () {
+    selectStep((active + 1) % STEPS.length);
+  });
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      selectStep(Number(t.getAttribute('data-step')));
+    });
+  });
+
+  // 进视口后再对第 1 段做预加载；素材缺失也不报错
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          video.preload = 'auto';
+          playVideo(STEPS[active].src);
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    io.observe(media);
+  }
+
+  /* ---------- H4 剖视图高亮 ---------- */
+  var isoBox = document.querySelector('.stack-iso');
+  if (isoBox) {
+    var isoHot = function (on) { isoBox.classList.toggle('is-hot', on); };
+    isoBox.addEventListener('mouseenter', function () { isoHot(true); });
+    isoBox.addEventListener('mouseleave', function () { isoHot(false); });
+    document.querySelectorAll('.stack-list li').forEach(function (li, i) {
+      li.addEventListener('mouseenter', function () { isoHot(true); });
+    });
+  }
+
+  /* ---------- 弹窗：商务二维码 / 视频 ---------- */
+  var leadModal = document.getElementById('lead-modal');
+  var filmModal = document.getElementById('film-modal');
+  var filmPlayer = document.getElementById('filmPlayer');
+  var lastFocus = null;
+
+  function anyOpen() {
+    return (leadModal && leadModal.classList.contains('is-open')) ||
+           (filmModal && filmModal.classList.contains('is-open'));
+  }
+
+  function unlock() {
+    if (!anyOpen()) document.body.classList.remove('is-locked');
+  }
+
+  function openLead() {
+    lastFocus = document.activeElement;
+    leadModal.classList.add('is-open');
+    document.body.classList.add('is-locked');
+  }
+
+  function closeLead() {
+    leadModal.classList.remove('is-open');
+    unlock();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function openFilm() {
+    lastFocus = document.activeElement;
+    filmModal.classList.add('is-open');
+    document.body.classList.add('is-locked');
+    if (filmPlayer) {
+      try { filmPlayer.currentTime = 0; } catch (err) {}
+      var p = filmPlayer.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+  }
+
+  function closeFilm() {
+    filmModal.classList.remove('is-open');
+    if (filmPlayer) {
+      filmPlayer.pause();
+      try { filmPlayer.currentTime = 0; } catch (err) {}
+    }
+    unlock();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  Array.prototype.slice.call(document.querySelectorAll('[data-open-modal]')).forEach(function (el) {
+    el.addEventListener('click', function (e) { e.preventDefault(); openLead(); });
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('[data-close-modal]')).forEach(function (el) {
+    el.addEventListener('click', closeLead);
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('[data-open-film]')).forEach(function (el) {
+    el.addEventListener('click', function (e) { e.preventDefault(); openFilm(); });
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('[data-close-film]')).forEach(function (el) {
+    el.addEventListener('click', closeFilm);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (leadModal.classList.contains('is-open')) closeLead();
+    if (filmModal.classList.contains('is-open')) closeFilm();
+  });
+})();
+</script>
+
+<script>
+/* 主题切换：与 about.html 等页面同一套（body.light-theme + localStorage viitrix-theme） */
+(function () {
+  var KEY = 'viitrix-theme';
+  var body = document.body;
+  var dIcon = document.getElementById('theme-icon-dark');
+  var lIcon = document.getElementById('theme-icon-light');
+  var mdIcon = document.getElementById('mobile-theme-icon-dark');
+  var mlIcon = document.getElementById('mobile-theme-icon-light');
+
+  function paint(isLight) {
+    body.classList.toggle('light-theme', isLight);
+    var navLogo = document.querySelector(".nav-logo-img");
+    if (navLogo) { navLogo.src = isLight ? "images/logo-white.png" : "images/logo.png"; }
+    if (dIcon) { dIcon.classList.toggle('is-hidden', isLight); }
+    if (lIcon) { lIcon.classList.toggle('is-hidden', !isLight); }
+    if (mdIcon) { mdIcon.classList.toggle('is-hidden', isLight); }
+    if (mlIcon) { mlIcon.classList.toggle('is-hidden', !isLight); }
+  }
+
+  function toggle() {
+    var isLight = !body.classList.contains('light-theme');
+    paint(isLight);
+    try { localStorage.setItem(KEY, isLight ? 'light' : 'dark'); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  paint(saved === 'light');
+
+  var a = document.getElementById('theme-toggle-btn');
+  var b = document.getElementById('mobile-theme-toggle');
+  if (a) { a.addEventListener('click', toggle); }
+  if (b) { b.addEventListener('click', toggle); }
+})();
+</script>
+</body>
+</html>

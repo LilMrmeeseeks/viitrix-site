@@ -1,0 +1,854 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 云锦微VIITRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #05080f;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00d4ff;
+            --border-light: rgba(255,255,255,0.05);
+            --border-medium: rgba(255,255,255,0.1);
+            --nav-bg: rgba(10,14,23,0.85);
+            --nav-border: rgba(255,255,255,0.05);
+            --video-bg: #0d1117;
+            --video-label-bg: rgba(0,212,255,0.1);
+            --video-label-color: #00d4ff;
+        }
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #f8f9fa;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #0088cc;
+            --border-light: rgba(0,0,0,0.06);
+            --border-medium: rgba(0,0,0,0.1);
+            --nav-bg: rgba(255,255,255,0.9);
+            --nav-border: rgba(0,0,0,0.06);
+            --video-bg: #e5e7eb;
+            --video-label-bg: rgba(0,136,204,0.1);
+            --video-label-color: #0088cc;
+        }
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .active-nav {
+            color: var(--accent-cyan) !important;
+        }
+        .milestone-container {
+            position: relative;
+        }
+        .milestone-svg {
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            z-index: 0;
+        }
+        .milestone-path {
+            stroke: var(--accent-cyan);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 550;
+            stroke-dashoffset: 550;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+        .milestone-path.drawn {
+            stroke-dashoffset: 0;
+        }
+        .milestone-dot {
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .milestone-dot.show {
+            transform: scale(1);
+        }
+        .milestone-dot:last-child {
+            animation: lastNodePulse 2s ease-in-out infinite;
+        }
+        @keyframes lastNodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link[data-page="mam"]::after { background: var(--accent-purple); }
+        .nav-link[data-page="ocean"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="agibox"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="scenarios"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="about"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="contact"]::after { background: var(--text-primary); }
+        .parallax-bg {
+            will-change: transform;
+        }
+
+        /* Video Expand Styles */
+        .video-expand-wrapper {
+            width: 85vw;
+            max-width: 1200px;
+            aspect-ratio: 16/9;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-expand-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-expand-wrapper:hover .video-controls,
+        .video-controls.visible {
+            opacity: 1;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-bar:hover {
+            height: 6px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #FF6B35;
+            border-radius: 2px;
+            width: 0%;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #FF6B35;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.5);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .progress-bar:hover .progress-fill::after {
+            opacity: 1;
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            font-family: monospace;
+        }
+
+        /* About Page Decorative Vertical Line */
+        .about-header {
+            position: relative;
+            padding-left: 48px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .about-decor-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-cyan);
+            border-radius: 2px;
+        }
+        @media (max-width: 768px) {
+            .about-header {
+                padding-left: 24px;
+            }
+            .about-decor-line {
+                width: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-xl border-b transition-all duration-300" style="background: var(--nav-bg); border-color: var(--nav-border);">
+        <div class="max-w-7xl mx-auto h-full px-4 lg:px-8 flex items-center justify-between">
+            <a href="index.html"><img src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="index.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="mam">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="ocean">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="agibox">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="scenarios">落地场景</a>
+                <a href="about.html" class="nav-link active active-nav font-medium" data-page="about">关于我们</a>
+                <a href="contact.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="contact">联系我们</a>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle-btn" class="flex items-center justify-center w-10 h-10 rounded-lg transition-colors" style="background: var(--bg-card); border-color: var(--border-light); border: 1px solid;">
+                    <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2" style="color: var(--text-primary);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden border-t hidden transition-all duration-300" style="background: var(--bg-primary); border-color: var(--nav-border);">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">落地场景</a>
+                <a href="about.html" class="block font-medium text-[var(--accent-cyan)]">关于我们</a>
+                <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">联系我们</a>
+                <button id="mobile-theme-toggle" class="w-full flex items-center justify-center gap-2 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                    <svg id="mobile-theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-[120px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-5xl mx-auto">
+            <div class="about-header">
+                <div class="about-decor-line"></div>
+                <h1 class="text-[36px] md:text-[48px] font-black" style="color: var(--text-primary);">关于我们</h1>
+                <p class="text-[18px] mt-6 max-w-3xl leading-relaxed" style="color: var(--text-secondary);">
+                    云锦微（VIITRIX）的终局，是把超级智能塞进一个针尖。世界模型MaM-GPT · 边缘AI大脑AGI Box · 物理AI基础设施。陆地已落地，海洋正进化——让AI在物理现场爆发。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">公司介绍</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col">
+                    <div class="aspect-video rounded-xl overflow-hidden relative group cursor-pointer transition-colors duration-300" style="background: var(--video-bg);">
+                        <video id="company-video" 
+                               class="absolute inset-0 w-full h-full object-cover"
+                               poster="images/tvc-cover.jpg"
+                               playsinline
+                               webkit-playsinline
+                               preload="metadata">
+                            <source src="videos/tvc-brand1.mp4" type="video/mp4">
+                        </video>
+                        <div id="company-play-btn" class="absolute inset-0 flex items-end justify-end p-4">
+                            <button class="w-14 h-14 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background: var(--accent-cyan); opacity: 0.8;">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <button id="company-video-fullscreen-btn" class="absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100" 
+                                style="background: rgba(0,0,0,0.5);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-4 flex items-center justify-center">
+                        <span class="text-[18px] font-bold px-6 py-2 rounded-full transition-all duration-300" style="background: var(--video-label-bg); color: var(--video-label-color);">公司介绍</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="aspect-video rounded-xl overflow-hidden relative group cursor-pointer transition-colors duration-300" style="background: var(--video-bg);">
+                        <video id="product-video" 
+                               class="absolute inset-0 w-full h-full object-cover"
+                               poster="images/tvc-cover.jpg"
+                               playsinline
+                               webkit-playsinline
+                               preload="metadata">
+                            <source src="videos/tvc-solution1.mp4" type="video/mp4">
+                        </video>
+                        <div id="product-play-btn" class="absolute inset-0 flex items-end justify-end p-4">
+                            <button class="w-14 h-14 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background: var(--accent-orange); opacity: 0.8;">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <button id="product-video-fullscreen-btn" class="absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100" 
+                                style="background: rgba(0,0,0,0.5);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-4 flex items-center justify-center">
+                        <span class="text-[18px] font-bold px-6 py-2 rounded-full transition-all duration-300" style="background: rgba(255,107,53,0.1); color: var(--accent-orange);">方案介绍</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[40px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-[13px] text-center" style="color: var(--text-muted);">云锦微负责技术产业化，浙江大学舟山海洋中心负责学术验证与概念验证，合资公司深渊矩阵承载海洋具身智能产业化。</p>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">核心团队</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-16 h-16 rounded-full overflow-hidden">
+                            <img src="images/team-wang.jpg" alt="王文艺" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-full flex items-center justify-center hidden" style="background: linear-gradient(135deg, #0088cc, #00d4ff);">
+                                <span class="text-[24px] font-bold text-white">王</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-[18px] font-bold" style="color: var(--text-primary);">王文艺</h4>
+                            <p class="text-[14px]" style="color: #0088cc;">创始人 · CEO</p>
+                        </div>
+                    </div>
+                    <p class="text-[14px] mt-4 leading-relaxed" style="color: var(--text-secondary);">浙江大学博士，前依图科技硬件总经理，20年芯片-OS-硬件全栈经验，擅长大模型小型化与边缘部署，主导AGI Box从技术到量产落地。</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-16 h-16 rounded-full overflow-hidden">
+                            <img src="images/team-zhouchang.png" alt="周昌" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-full flex items-center justify-center hidden" style="background: linear-gradient(135deg, #ff6b35, #f59e0b);">
+                                <span class="text-[24px] font-bold text-white">周</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-[18px] font-bold" style="color: var(--text-primary);">周昌</h4>
+                            <p class="text-[14px]" style="color: #ff6b35;">首席科学家</p>
+                        </div>
+                    </div>
+                    <p class="text-[14px] mt-4 leading-relaxed" style="color: var(--text-secondary);">浙江大学博士，前阿里巴巴达摩院大模型研发负责人，专长大规模多模态模型训练与边缘推理加速，主导MaM-GPT世界模型与VT-Transformer框架研发。</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-16 h-16 rounded-full overflow-hidden">
+                            <img src="images/team-zhgzhou.jpg" alt="郑国轴" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-full flex items-center justify-center hidden" style="background: linear-gradient(135deg, #a855f7, #6366f1);">
+                                <span class="text-[24px] font-bold text-white">郑</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-[18px] font-bold" style="color: var(--text-primary);">郑国轴</h4>
+                            <p class="text-[14px] whitespace-nowrap" style="color: #a855f7;">海洋AI首席科学家</p>
+                        </div>
+                    </div>
+                    <p class="text-[14px] mt-4 leading-relaxed" style="color: var(--text-secondary);">浙江大学博士、副研究员，OceanGPT核心成员，海洋物理AI领域专家，授权专利20余项，主导海洋世界模型训练与知识图谱构建。</p>
+                </div>
+            </div>
+            
+            <p class="text-[13px] text-center mt-6" style="color: var(--text-muted);">三位博士，覆盖大模型训练、边缘部署与海洋领域认知——同一终局：把超级智能塞进针尖。</p>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">战略伙伴</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="rounded-xl p-6 border text-center" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(0,136,204,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-cyan);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-[16px] font-bold" style="color: var(--text-primary);">学术数据伙伴</h3>
+                    <div class="mt-4 flex justify-center items-center gap-6">
+                        <img src="images/partners/partner-1.png" alt="浙江大学" class="h-12 w-auto object-contain opacity-80" style="max-width: 90px;">
+                        <img src="images/partners/partner-2.png" alt="战略合作伙伴" class="h-12 w-auto object-contain opacity-80" style="max-width: 90px;">
+                    </div>
+                    <p class="text-[12px] mt-4" style="color: var(--text-muted);">与浙江大学舟山海洋中心、战略合作伙伴达成深度合作，共建实景数据底座</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border text-center" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(255,107,53,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-orange);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-[16px] font-bold" style="color: var(--text-primary);">算力生态合作伙伴</h3>
+                    <div class="mt-4 flex justify-center items-center">
+                        <img src="images/partners/partner-3.png" alt="Intel" class="h-12 w-auto object-contain opacity-80" style="max-width: 90px;">
+                    </div>
+                    <p class="text-[12px] mt-4" style="color: var(--text-muted);">达成软硬一体算力适配深度合作</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border text-center" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(147,51,234,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #a855f7;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-[16px] font-bold" style="color: var(--text-primary);">业务覆盖</h3>
+                    <div class="mt-3 space-y-1">
+                        <p class="text-[14px]" style="color: var(--text-secondary);">工业、能源、文旅、海洋多实体行业</p>
+                    </div>
+                    <p class="text-[12px] mt-4" style="color: var(--text-muted);">完成多场景落地验证</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">里程碑</h2>
+            
+            <div class="milestone-container relative">
+                <svg class="milestone-svg" viewBox="0 0 2 550" preserveAspectRatio="none">
+                    <path class="milestone-path" d="M1 0 L1 550"></path>
+                </svg>
+                
+                <div class="space-y-8">
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: var(--accent-cyan);"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">初创</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">云锦微成立，聚焦物理AI与边缘端智能核心技术研发</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: var(--accent-cyan);"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">技术落地</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">自研MaM-GPT实景进化世界模型商用分支与AGI Box硬件底座完成工程验证</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: var(--accent-cyan);"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">产学研布局</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">与浙江大学舟山海洋中心、战略合作伙伴达成战略合作，启动海洋世界模型研发</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: var(--accent-orange);"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">量产阶段</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">完成AGI Box三层硬件体系标准化，面向全行业规模化交付</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: var(--accent-orange);"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">深渊矩阵成立</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">搭建海洋专项产业化载体，承载通用世界模型实景训练研发工作</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2" style="background: var(--bg-card); border-color: #a855f7;"></div>
+                        <div class="rounded-lg p-4 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">当前阶段</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-secondary);">商用场景规模化落地，海洋通用世界模型持续训练迭代</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16 mt-6">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2 border-dashed" style="background: transparent; border-color: var(--text-muted);"></div>
+                        <div class="rounded-lg p-4 border border-dashed" style="background: transparent; border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-muted);">2028</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-muted);">MaM-GPT下一代全域泛化架构赋能全行业AGI Box硬件，成为「海上高德」</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-16 mt-6">
+                        <div class="milestone-dot absolute left-4 w-5 h-5 rounded-full border-2 border-dashed" style="background: transparent; border-color: var(--text-muted);"></div>
+                        <div class="rounded-lg p-4 border border-dashed" style="background: transparent; border-color: var(--border-light);">
+                            <h4 class="text-[16px] font-bold" style="color: var(--text-muted);">2029</h4>
+                            <p class="text-[14px] mt-2" style="color: var(--text-muted);">规模化水下机器人部署，成为「水下大疆」</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">长期愿景</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(0,136,204,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-cyan);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">技术愿景</h4>
+                    <p class="text-[13px] mt-3" style="color: var(--text-secondary);">构建统一物理隐空间世界模型，实现海洋到陆地全场景通用AI</p>
+                    <p class="text-[12px] mt-2 italic" style="color: rgba(0,212,255,0.6);">区别于依赖仿真数据的云端大模型，MaM-GPT基于真实物理场景实景训练进化</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(255,107,53,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-orange);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">产业愿景</h4>
+                    <p class="text-[13px] mt-3" style="color: var(--text-secondary);">打造实体产业智能化基础设施，让物理AI成为行业标配</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(147,51,234,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #a855f7;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">生态愿景</h4>
+                    <p class="text-[13px] mt-3" style="color: var(--text-secondary);">联合顶尖学术与产业伙伴，共建物理AI开放生态</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(74,222,128,0.1);">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4ade80;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-[16px] font-bold" style="color: var(--text-primary);">长期目标</h4>
+                    <p class="text-[13px] mt-3" style="color: var(--text-secondary);">依托实景进化世界模型，成为物理AI核心技术引领者</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[60px] px-4" style="background: rgba(242,243,245,0.8);">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="text-[16px] font-bold" style="color: var(--accent-cyan);">当下交付：MaM-GPT成熟商用分支，即刻实现预测-规划-执行自动化闭环
+            <p class="text-[16px] font-bold mt-2" style="color: #a855f7;">未来突破：统一物理隐空间架构，一套底座覆盖全部物理世界</p>
+        </div>
+    </section>
+
+    <footer id="footer" class="py-12 px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <img id="footer-logo" src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto mb-4">
+                    <p class="text-sm" style="color: var(--text-muted);">让AI落地物理世界</p>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4" style="color: var(--text-primary);">快速链接</h4>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">首页</a>
+                        <a href="investor-mamgpt.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">MaM-GPT 世界模型</a>
+                        <a href="investor-abyss.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">深渊矩阵·海洋具身智能</a>
+                        <a href="customer-agibox.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">AGI Box 物理AI边缘大脑</a>
+                        <a href="scenarios.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">落地场景</a>
+                        <a href="about.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">关于我们</a>
+                    </div>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">© 2026 云锦微VIITRIX</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isLightTheme = false;
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            const body = document.body;
+            const navLogo = document.querySelector('nav img');
+            const footerLogo = document.getElementById('footer-logo');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const mobileThemeIconDark = document.getElementById('mobile-theme-icon-dark');
+            const mobileThemeIconLight = document.getElementById('mobile-theme-icon-light');
+            if (isLightTheme) {
+                body.classList.add('light-theme');
+                if (navLogo) navLogo.src = 'images/logo-white.png';
+                if (footerLogo) footerLogo.src = 'images/logo-white.png';
+                if (themeIconDark) themeIconDark.classList.add('hidden');
+                if (themeIconLight) themeIconLight.classList.remove('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.add('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.remove('hidden');
+            } else {
+                body.classList.remove('light-theme');
+                if (navLogo) navLogo.src = 'images/logo.png';
+                if (footerLogo) footerLogo.src = 'images/logo.png';
+                if (themeIconDark) themeIconDark.classList.remove('hidden');
+                if (themeIconLight) themeIconLight.classList.add('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.remove('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.add('hidden');
+            }
+            localStorage.setItem('viitrix-theme', isLightTheme ? 'light' : 'dark');
+        }
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
+        const savedTheme = localStorage.getItem('viitrix-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function setupVideoPlayer(videoId, playBtnId) {
+            const video = document.getElementById(videoId);
+            const playBtn = document.getElementById(playBtnId);
+            const fullscreenBtn = document.getElementById(videoId + '-fullscreen-btn');
+            
+            if (!video || !playBtn) return;
+            
+            const togglePlay = () => {
+                if (video.paused) {
+                    video.play().catch(err => {
+                        console.error('Video play error:', err);
+                    });
+                    playBtn.style.opacity = '0';
+                } else {
+                    video.pause();
+                    playBtn.style.opacity = '1';
+                }
+            };
+            
+            const toggleExpand = () => {
+                const overlay = document.getElementById('video-expand-overlay');
+                
+                if (overlay) {
+                    const expandedVideo = overlay.querySelector('video');
+                    if (expandedVideo) {
+                        video.currentTime = expandedVideo.currentTime;
+                        video.muted = expandedVideo.muted;
+                        if (!expandedVideo.paused) {
+                            video.play().catch(err => {});
+                        }
+                    }
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                } else {
+                    const overlay = document.createElement('div');
+                    overlay.id = 'video-expand-overlay';
+                    overlay.className = 'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4';
+                    overlay.addEventListener('click', (e) => {
+                        if (e.target === overlay) toggleExpand();
+                    });
+                    
+                    const closeBtn = document.createElement('button');
+                    closeBtn.className = 'absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center text-white bg-black/50 hover:bg-black/70 transition-colors';
+                    closeBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                    closeBtn.addEventListener('click', toggleExpand);
+                    overlay.appendChild(closeBtn);
+                    
+                    const videoWrapper = document.createElement('div');
+                    videoWrapper.className = 'video-expand-wrapper w-full max-w-[1200px] aspect-video rounded-xl overflow-hidden shadow-2xl';
+                    
+                    const currentTime = video.currentTime;
+                    const isMuted = video.muted;
+                    
+                    video.pause();
+                    
+                    const clonedVideo = video.cloneNode(true);
+                    clonedVideo.currentTime = currentTime;
+                    clonedVideo.muted = isMuted;
+                    clonedVideo.style.position = 'relative';
+                    clonedVideo.style.width = '100%';
+                    clonedVideo.style.height = '100%';
+                    clonedVideo.style.objectFit = 'cover';
+                    
+                    clonedVideo.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (clonedVideo.paused) {
+                            clonedVideo.play().catch(err => {});
+                        } else {
+                            clonedVideo.pause();
+                        }
+                    });
+                    
+                    const controls = document.createElement('div');
+                    controls.className = 'video-controls';
+                    
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    
+                    const progressFill = document.createElement('div');
+                    progressFill.className = 'progress-fill';
+                    progressBar.appendChild(progressFill);
+                    
+                    const timeDisplay = document.createElement('div');
+                    timeDisplay.className = 'time-display';
+                    timeDisplay.innerHTML = '<span class="current-time">00:00</span><span class="duration">00:00</span>';
+                    
+                    controls.appendChild(progressBar);
+                    controls.appendChild(timeDisplay);
+                    videoWrapper.appendChild(controls);
+                    
+                    const updateProgress = () => {
+                        if (clonedVideo.duration) {
+                            const percent = (clonedVideo.currentTime / clonedVideo.duration) * 100;
+                            progressFill.style.width = percent + '%';
+                            
+                            const current = formatTime(clonedVideo.currentTime);
+                            const duration = formatTime(clonedVideo.duration);
+                            timeDisplay.querySelector('.current-time').textContent = current;
+                            timeDisplay.querySelector('.duration').textContent = duration;
+                        }
+                    };
+                    
+                    const formatTime = (seconds) => {
+                        const mins = Math.floor(seconds / 60);
+                        const secs = Math.floor(seconds % 60);
+                        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    };
+                    
+                    clonedVideo.addEventListener('timeupdate', updateProgress);
+                    
+                    clonedVideo.addEventListener('loadedmetadata', () => {
+                        updateProgress();
+                    });
+                    
+                    progressBar.addEventListener('click', (e) => {
+                        const rect = progressBar.getBoundingClientRect();
+                        const percent = (e.clientX - rect.left) / rect.width;
+                        clonedVideo.currentTime = percent * clonedVideo.duration;
+                    });
+                    
+                    clonedVideo.addEventListener('play', () => {
+                        controls.classList.add('visible');
+                    });
+                    
+                    videoWrapper.appendChild(clonedVideo);
+                    overlay.appendChild(videoWrapper);
+                    document.body.appendChild(overlay);
+                    document.body.style.overflow = 'hidden';
+                    
+                    clonedVideo.load();
+                    clonedVideo.play().catch(err => {});
+                }
+            };
+            
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleExpand();
+            });
+            
+            video.addEventListener('click', togglePlay);
+            
+            video.addEventListener('ended', () => {
+                playBtn.style.opacity = '1';
+            });
+            
+            video.addEventListener('play', () => {
+                playBtn.style.opacity = '0';
+                if (fullscreenBtn) fullscreenBtn.style.opacity = '1';
+            });
+            
+            video.addEventListener('pause', () => {
+                playBtn.style.opacity = '1';
+                if (fullscreenBtn) fullscreenBtn.style.opacity = '0';
+            });
+            
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleExpand();
+                });
+            }
+        }
+
+        setupVideoPlayer('company-video', 'company-play-btn');
+        setupVideoPlayer('product-video', 'product-play-btn');
+
+        const milestoneObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    document.querySelector('.milestone-path').classList.add('drawn');
+                    document.querySelectorAll('.milestone-dot').forEach((dot, i) => {
+                        setTimeout(() => dot.classList.add('show'), i * 200);
+                    });
+                    milestoneObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const milestoneSection = document.querySelector('.milestone-container');
+        if (milestoneSection) {
+            milestoneObserver.observe(milestoneSection);
+        }
+
+        const parallaxElements = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.1;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }, { passive: true });
+    </script>
+</body>
+</html>

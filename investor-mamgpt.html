@@ -1,0 +1,1672 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaM-GPT 世界模型 - 云锦微VIITRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #05080f;
+            --bg-card: #1a1f2e;
+            --bg-card-hover: #252b3d;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-cyan-bright: #00d4ff;
+            --accent-blue: #0066FF;
+            --accent-teal: #0891B2;
+            --accent-green: #10B981;
+            --accent-green-dark: #059669;
+            --border-light: rgba(255,255,255,0.05);
+            --border-medium: rgba(255,255,255,0.1);
+            --border-strong: rgba(255,255,255,0.15);
+            --nav-bg: rgba(10,14,23,0.85);
+            --nav-border: rgba(255,255,255,0.05);
+            --arch-vla-bg: rgba(255,107,53,0.05);
+            --arch-vla-border: rgba(255,107,53,0.1);
+            --arch-ulp-bg: rgba(168,85,247,0.05);
+            --arch-ulp-border: rgba(168,85,247,0.1);
+            --diff-col-bg-start: rgba(255,107,53,0.02);
+            --diff-col-bg-end: rgba(168,85,247,0.02);
+            --diff-col-border: rgba(255,255,255,0.05);
+        }
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #f8f9fa;
+            --bg-card-hover: #f0f0f2;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #0088cc;
+            --accent-purple: #9333ea;
+            --accent-cyan-bright: #00d4ff;
+            --accent-blue: #0066FF;
+            --accent-teal: #0891B2;
+            --accent-green: #10B981;
+            --accent-green-dark: #059669;
+            --border-light: rgba(0,0,0,0.06);
+            --border-medium: rgba(0,0,0,0.1);
+            --border-strong: rgba(0,0,0,0.15);
+            --nav-bg: rgba(255,255,255,0.9);
+            --nav-border: rgba(0,0,0,0.06);
+            --arch-vla-bg: #FFF8F5;
+            --arch-vla-border: #FFE8E0;
+            --arch-ulp-bg: #F8F5FF;
+            --arch-ulp-border: #E8E0FF;
+            --diff-col-bg-start: #FFF8F5;
+            --diff-col-bg-end: #F8F5FF;
+            --diff-col-border: #F0F0F0;
+        }
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .animate-element,
+            .animate-video {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        }
+        .animate-element {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .animate-element:nth-child(1) { animation-delay: 0s; }
+        .animate-element:nth-child(2) { animation-delay: 0.1s; }
+        .animate-element:nth-child(3) { animation-delay: 0.2s; }
+        .animate-element:nth-child(4) { animation-delay: 0.3s; }
+        .animate-video {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            animation-delay: 0.3s;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .active-nav {
+            color: var(--accent-orange) !important;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link[data-page="mam"]::after { background: var(--accent-purple); }
+        .nav-link[data-page="ocean"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="agibox"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="scenarios"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="about"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="contact"]::after { background: var(--text-primary); }
+        .parallax-bg {
+            will-change: transform;
+        }
+        .accordion-header {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .accordion-header:hover {
+            background: var(--bg-card-hover);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-content.open {
+            max-height: 500px;
+        }
+        .animate-breathe-3s {
+            animation: breathe 3s ease-in-out infinite;
+        }
+        .animate-breathe-2s {
+            animation: breathe 2s ease-in-out infinite;
+        }
+        .animate-ripple-outer {
+            animation: ripple 3s ease-out infinite;
+        }
+        .animate-ripple-inner {
+            animation: ripple 3s ease-out infinite;
+            animation-delay: 1s;
+        }
+        .animate-rotate-cw-20s {
+            animation: rotate-cw 20s linear infinite;
+        }
+        .animate-rotate-ccw-15s {
+            animation: rotate-ccw 15s linear infinite;
+        }
+        .animate-dash-flow {
+            animation: dash-flow 3s ease-out infinite;
+        }
+        .animate-spiral-draw {
+            animation: spiral-draw 6s ease-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+        @keyframes ripple {
+            0% { r: 15; opacity: 0.8; }
+            100% { r: 35; opacity: 0; }
+        }
+        @keyframes rotate-cw {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes rotate-ccw {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes dash-flow {
+            0% { stroke-dashoffset: 50; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes spiral-draw {
+            0% { stroke-dashoffset: 200; opacity: 0; }
+            10% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        
+        /* MaM-GPT Card Animation */
+        .mamgpt-card-vla, .mamgpt-card-ulp {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: all 0.4s ease-out;
+        }
+        .mamgpt-card-vla.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .mamgpt-card-ulp.animate {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.2s;
+        }
+        .mamgpt-card-tag {
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: all 0.3s ease-out;
+        }
+        .mamgpt-card-vla.animate .mamgpt-card-tag {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.1s;
+        }
+        .mamgpt-card-ulp.animate .mamgpt-card-tag {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+        
+        /* Table Column Highlight */
+        .table-col-vla, .table-col-ulp {
+            transition: all 0.25s ease;
+        }
+        .table-col-vla.highlight {
+            background: rgba(255,107,53,0.08);
+            font-weight: 500;
+        }
+        .table-col-ulp.highlight {
+            background: rgba(147,51,234,0.08);
+            font-weight: 500;
+        }
+        
+        /* Accordion Animation */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .accordion-content.open {
+            max-height: 600px;
+        }
+        
+        /* Button Hover Animation */
+        .mamgpt-btn {
+            transition: all 0.2s ease;
+        }
+        .mamgpt-btn:hover {
+            transform: translateX(4px);
+        }
+        .mamgpt-btn-arrow {
+            transition: transform 0.2s ease;
+        }
+        .mamgpt-btn:hover .mamgpt-btn-arrow {
+            transform: translateX(4px);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin: 40px 0 24px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .section-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--border-medium);
+            margin: 12px auto 0;
+        }
+        
+        .page-intro {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 40px;
+            padding: 0 16px;
+        }
+        .page-intro p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .page-intro p strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .intro-line {
+            width: 40px;
+            height: 2px;
+            background: var(--text-secondary);
+            margin: 20px auto 0;
+            border-radius: 1px;
+        }
+        
+        .arch-cards-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .arch-card {
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 16px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        .arch-card.vla {
+            background: var(--arch-vla-bg);
+            border: 1px solid var(--arch-vla-border);
+            border-left: 3px solid var(--accent-orange);
+        }
+        .arch-card.ulp {
+            background: var(--arch-ulp-bg);
+            border: 1px solid var(--arch-ulp-border);
+            border-left: 3px solid var(--accent-purple);
+        }
+        .arch-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .arch-tag.vla { background: rgba(255,107,53,0.1); color: var(--accent-orange); }
+        .arch-tag.ulp { background: rgba(168,85,247,0.1); color: var(--accent-purple); }
+        .arch-title {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .arch-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .arch-items {
+            flex-grow: 1;
+        }
+        .arch-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .arch-item:last-child { margin-bottom: 0; }
+        .arch-item-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            color: var(--text-muted);
+        }
+        .arch-card.vla .arch-item-icon {
+            color: #FF6B35;
+            opacity: 0.5;
+        }
+        .arch-card.ulp .arch-item-icon {
+            color: #8B5CF6;
+            opacity: 0.5;
+        }
+        .arch-item-body {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .arch-item-body strong {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .diff-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 16px 0 24px;
+        }
+        .diff-col {
+            text-align: center;
+            padding: 16px 12px;
+            border-radius: 8px;
+            background: linear-gradient(to bottom, var(--diff-col-bg-start) 0%, var(--diff-col-bg-end) 100%);
+            border: 1px solid var(--diff-col-border);
+        }
+        .diff-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .diff-tag-vla {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: rgba(255,107,53,0.1);
+            color: #FF6B35;
+            font-weight: 500;
+        }
+        .diff-tag-ulp {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: rgba(139,92,246,0.1);
+            color: #8B5CF6;
+            font-weight: 500;
+        }
+        .diff-col-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .diff-content-b {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 0;
+        }
+        .diff-text-vla {
+            font-size: 13px;
+            color: #FF6B35;
+            font-weight: 500;
+            text-align: center;
+        }
+        .step-evolution {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+        }
+        .step-arrow-svg {
+            width: 28px;
+            height: 20px;
+        }
+        .step-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .diff-text-ulp {
+            font-size: 13px;
+            color: #8B5CF6;
+            font-weight: 500;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .diff-summary { grid-template-columns: 1fr; }
+        }
+        
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+            margin-bottom: 16px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
+        .compare-table th {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--border-medium);
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 13px;
+            background: var(--bg-card);
+        }
+        .compare-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            vertical-align: top;
+            line-height: 1.6;
+        }
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+        .compare-table tr:nth-child(even) td {
+            background: rgba(255,255,255,0.02);
+        }
+        .compare-table .diff-row td {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .compare-table .col-vla { color: var(--accent-orange); font-weight: 500; }
+        .compare-table .col-ulp { color: var(--accent-purple); font-weight: 500; }
+        .compare-table .diff-row td:first-child {
+            font-weight: 500;
+            color: var(--text-primary);
+            border-left: 2px solid #FF6B35;
+            padding-left: 10px;
+        }
+        .compare-table .diff-row td:last-child {
+            border-left: 2px solid #8B5CF6;
+            padding-left: 10px;
+        }
+        
+        /* Gen Section VLA */
+        .gen-section.vla {
+            position: relative;
+            border-left: 3px solid var(--accent-orange);
+        }
+        .gen-section.vla::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 20%;
+            width: 1px; height: 60%;
+            background: linear-gradient(to bottom, var(--accent-orange), transparent);
+            opacity: 0.4;
+        }
+        
+        /* Gen Section ULP */
+        .gen-section.ulp {
+            position: relative;
+            border-left: 3px solid var(--accent-purple);
+        }
+        .gen-section.ulp::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100px; height: 100px;
+            border: 1px solid var(--accent-purple);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: rippleExpand 3s ease-out infinite;
+        }
+        
+        @keyframes rippleExpand {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            20% { opacity: 0.15; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+        
+        /* Evolution Arrow */
+        .evolution-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px 0;
+        }
+        
+        /* Narrative Connector Pulse */
+        .narrative-connector {
+            position: relative;
+        }
+        .narrative-connector .pulse-dot {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.6;
+            animation: pulseDot 3s ease-in-out infinite;
+        }
+        .narrative-connector .pulse-tail {
+            position: absolute;
+            bottom: 50%; left: 50%;
+            width: 1px;
+            height: 0px;
+            background: linear-gradient(to top, var(--accent-orange), transparent);
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: pulseTail 3s ease-in-out infinite;
+        }
+        .narrative-connector-1 .pulse-dot,
+        .narrative-connector-1 .pulse-tail { animation-delay: 0s; }
+        .narrative-connector-2 .pulse-dot,
+        .narrative-connector-2 .pulse-tail { animation-delay: 1s; }
+        .loop-arc {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 40px;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        @media (max-width: 768px) {
+            .loop-arc { display: none; }
+        }
+        
+        @keyframes pulseDot {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
+        }
+        @keyframes pulseTail {
+            0% { height: 0; opacity: 0; bottom: 50%; }
+            30% { opacity: 0.3; }
+            50% { height: 8px; opacity: 0.3; bottom: 60%; }
+            70% { opacity: 0; }
+            100% { height: 0; opacity: 0; bottom: 70%; }
+        }
+        
+        /* Narrative Card Stagger */
+        .narrative-card-1.animate { transition-delay: 0.2s; }
+        .narrative-card-2.animate { transition-delay: 0.6s; }
+        .narrative-card-3.animate { transition-delay: 1.0s; }
+
+        /* Engine Container Styles */
+        .engine-container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .engine-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 20px;
+        }
+        .engine-container-horizontal {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .engine-title-horizontal {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+        .engine-node {
+            width: 200px;
+            min-height: 90px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .engine-desc { font-size: 11px; line-height: 1.4; opacity: 0.85; }
+
+    </style>
+</head>
+<body>
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-xl border-b transition-all duration-300" style="background: var(--nav-bg); border-color: var(--nav-border);">
+        <div class="max-w-7xl mx-auto h-full px-4 lg:px-8 flex items-center justify-between">
+            <a href="index.html"><img src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="index.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="nav-link active active-nav font-medium" data-page="mam">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="ocean">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="agibox">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="scenarios">落地场景</a>
+                <a href="about.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="about">关于我们</a>
+                <a href="contact.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="contact">联系我们</a>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle-btn" class="flex items-center justify-center w-10 h-10 rounded-lg transition-colors" style="background: var(--bg-card); border-color: var(--border-light); border: 1px solid;">
+                    <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2" style="color: var(--text-primary);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden border-t hidden transition-all duration-300" style="background: var(--bg-primary); border-color: var(--nav-border);">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="block font-medium text-[var(--accent-orange)]">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">落地场景</a>
+                <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">关于我们</a>
+                <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">联系我们</a>
+                <button id="mobile-theme-toggle" class="w-full flex items-center justify-center gap-2 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                    <svg id="mobile-theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <svg style="display: none;">
+        <defs>
+            <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FF6B35" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.6"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <section id="mamgpt-hero" class="relative w-full overflow-hidden min-h-[640px] transition-colors duration-500" style="background: #0B1220;">
+        <div class="max-w-[1440px] mx-auto min-h-[640px] px-5 md:px-[80px] flex flex-col md:flex-row md:items-center gap-8 py-12 md:py-0">
+            <div id="mamgpt-hero-content" class="flex-1 flex flex-col justify-center text-center md:text-left">
+                <span id="mamgpt-hero-tag" class="animate-element text-[14px] font-semibold tracking-wider transition-colors duration-500" style="color: #00d4ff;">边缘AI大脑 AGI Box</span>
+                <h1 id="mamgpt-hero-title" class="animate-element mt-[20px] leading-[1.25] transition-colors duration-500" style="color: #ffffff; font-size: clamp(26px, 7vw, 52px); font-weight: 700;">物理AI的终局：<br>把超级智能塞进一个针尖</h1>
+                <p id="mamgpt-hero-desc" class="animate-element text-[16px] mt-[20px] leading-[1.7] transition-colors duration-500" style="color: rgba(255,255,255,0.7);">区别于依赖仿真数据的云端大模型，MaM-GPT基于真实物理场景实景训练进化</p>
+                <a href="#mamgpt-intro" id="scroll-to-intro" class="animate-element inline-flex items-center justify-center gap-2 py-3 px-8 mt-[36px] rounded-lg font-medium text-sm text-white hover:brightness-110 transition-all mx-auto md:mx-0" style="background: #0088cc; max-width: 200px;">
+                    探索MaM-GPT
+                </a>
+            </div>
+
+            <div class="flex-1 flex items-center justify-center w-full" style="height: 360px; min-height: 360px;">
+                <!-- 视频文件名称：videos/banner-dark.mp4（MaM-GPT页面技术版视频-暗色主题，12秒循环动画） -->
+                <!-- 视频文件名称：videos/banner-white.mp4（MaM-GPT页面技术版视频-白色主题，12秒循环动画） -->
+                <div id="mamgpt-video-container" class="relative w-full h-full" data-video-theme="dark">
+                    <!-- MaM-GPT Hero Video - Dark Theme (16% feathering) -->
+                    <video id="mamgpt-video-dark" class="mamgpt-video animate-video absolute inset-0 w-full h-full object-cover" style="display: block; mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%); mask-composite: intersect; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%); -webkit-mask-composite: source-in;" autoplay loop muted playsinline preload="metadata" poster="videos/banner-dark1.mp4">
+                        <source src="videos/banner-dark1.mp4" type="video/mp4">
+                        <source src="videos/tvc-solution1.mp4" type="video/mp4">
+                    </video>
+                    <!-- MaM-GPT Hero Video - Light Theme (12% feathering) -->
+                    <video id="mamgpt-video-white" class="mamgpt-video animate-video absolute inset-0 w-full h-full object-cover" style="display: none; mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-composite: intersect; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%); -webkit-mask-composite: source-in;" autoplay loop muted playsinline preload="metadata" poster="videos/banner-white1.mp4">
+                        <source src="videos/banner-white1.mp4" type="video/mp4">
+                        <source src="videos/tvc-solution1.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative h-[48px]" id="mamgpt-hero-transition" style="background: linear-gradient(to bottom, #0B1220, #0a0e17);"></div>
+    </section>
+
+    <section id="mamgpt-intro" class="pt-[16px] pb-[60px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center">
+                <h2 class="text-[28px] md:text-[36px] font-bold" style="color: var(--text-primary);">自研两代技术架构 · 实景进化能力全解析</h2>
+                <div class="page-intro mt-6">
+                    <p><strong>自研MaM-GPT世界模型</strong>包含两套分阶段技术架构，分别适配规模化商用落地与通用化技术迭代。新一代统一隐空间架构依托深渊矩阵海洋实景平台完成持续训练迭代，形成完整的技术体系闭环。</p>
+                    <p class="text-lg font-bold mt-4 text-center py-[10px] px-[24px] rounded-[8px] inline-block" style="background: rgba(0,136,204,0.08); color: #0088cc;">只要能够完成预测→规划→执行自动化闭环的系统，就是世界模型</p>
+                    <div class="intro-line"></div>
+                </div>
+                
+                <!-- Four Engines Triangle Ring Architecture - HIDDEN for redesign, code preserved for future restoration -->
+                <!--
+                <div class="engine-container-horizontal mt-10 rounded-2xl p-8" style="background: var(--bg-card); border: 1px solid var(--border-light);">
+                    <div class="engine-title-horizontal">四大引擎工程架构 · 云锦OS一体化底座</div>
+                    
+                    <svg width="640" height="300" viewBox="0 0 640 300" style="width: 100%; height: auto;">
+                        <defs>
+                            <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+                                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.06"/>
+                            </filter>
+                            <filter id="lineGlow" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="2" result="blur"/>
+                                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <marker id="arrPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                                <path d="M0,2 Q6,6 0,10 L2,6 Z" fill="#7C3AED" stroke="none"/>
+                            </marker>
+                            <marker id="arrBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                                <path d="M0,2 Q6,6 0,10 L2,6 Z" fill="#3B82F6" stroke="none"/>
+                            </marker>
+                            <marker id="arrOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                                <path d="M0,2 Q6,6 0,10 L2,6 Z" fill="#F97316" stroke="none"/>
+                            </marker>
+                        </defs>
+
+                        <ellipse cx="320" cy="130" rx="280" ry="100" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.3"/>
+                        <text x="320" y="30" text-anchor="middle" font-size="12" fill="#10B981" font-weight="600" opacity="0.8">云锦OS 边缘操控系统（安全治理，全程贯穿）</text>
+
+                        <path d="M 480 175 Q 320 210 160 175" fill="none" stroke="#F97316" stroke-width="2.5" marker-end="url(#arrOrange)" stroke-linecap="round" stroke-dasharray="10,5" filter="url(#lineGlow)">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M 160 175 Q 200 120 320 90" fill="none" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#arrBlue)" stroke-linecap="round" stroke-dasharray="10,5" filter="url(#lineGlow)">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M 320 90 Q 440 120 480 175" fill="none" stroke="#7C3AED" stroke-width="2.5" marker-end="url(#arrPurple)" stroke-linecap="round" stroke-dasharray="10,5" filter="url(#lineGlow)">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M 260 90 Q 160 120 160 175" fill="none" stroke="#7C3AED" stroke-width="2" stroke-dasharray="6,5" opacity="0.7" marker-end="url(#arrPurple)" filter="url(#lineGlow)">
+                            <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2.5s" repeatCount="indefinite"/>
+                        </path>
+
+                        <rect x="210" y="40" width="220" height="50" rx="12" fill="#7C3AED" filter="url(#cardShadow)"/>
+                        <text x="320" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="white">MaM-GPT</text>
+                        <text x="320" y="78" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.85)">世界模型 · 长程任务，持续理解物理世界</text>
+
+                        <rect x="480" y="150" width="140" height="50" rx="12" fill="#FFFFFF" stroke="#F97316" stroke-width="2" filter="url(#cardShadow)"/>
+                        <text x="550" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#F97316">VT-Claw</text>
+                        <text x="550" y="186" text-anchor="middle" font-size="9" fill="#6B7280">主动智能体计算框架（自治智能体）</text>
+
+                        <rect x="20" y="150" width="140" height="50" rx="12" fill="#FFFFFF" stroke="#3B82F6" stroke-width="2" filter="url(#cardShadow)"/>
+                        <text x="90" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#3B82F6">VT-Transformer</text>
+                        <text x="90" y="186" text-anchor="middle" font-size="9" fill="#6B7280">大模型加速计算框架（自我训练）</text>
+
+                        <rect x="150" y="220" width="340" height="45" rx="12" fill="#10B981" filter="url(#cardShadow)"/>
+                        <text x="320" y="240" text-anchor="middle" font-size="12" font-weight="700" fill="white">云锦OS 边缘操控系统（安全治理）</text>
+                        <text x="320" y="256" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.9)">内置 MaM-GPT · VT-Claw · VT-Transformer 三大核心组件</text>
+                        
+                        <text x="320" y="210" text-anchor="middle" font-size="11" fill="#F97316" font-weight="600">规划输出</text>
+                        <text x="195" y="130" text-anchor="middle" font-size="11" fill="#3B82F6" font-weight="600">执行数据沉淀</text>
+                        <text x="445" y="130" text-anchor="middle" font-size="11" fill="#7C3AED" font-weight="600">进化反哺</text>
+                        <text x="175" y="120" text-anchor="middle" font-size="10" fill="#7C3AED" opacity="0.9">反哺优化</text>
+
+                        <circle r="2.5" fill="white" opacity="0.9">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M 480 175 Q 320 210 160 175"/>
+                        </circle>
+                        <circle r="2.5" fill="white" opacity="0.9">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M 160 175 Q 200 120 320 90"/>
+                        </circle>
+                        <circle r="2.5" fill="white" opacity="0.9">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M 320 90 Q 440 120 480 175"/>
+                        </circle>
+
+                        <text x="320" y="285" text-anchor="middle" font-size="11" fill="#059669" font-weight="600">云锦OS 边缘操控系统（安全治理：数据本地隔离 · 权限管控 · 物理规则约束）全程贯穿</text>
+                    </svg>
+                    
+                    <div class="architecture-summary-horizontal mt-4 px-4" style="padding: 12px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-light); text-align: center; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                        四大引擎形成「执行→沉淀→训练→进化→再执行」的自优化闭环，全部轻量化部署于AGI Box边缘硬件，构成物理AI独有的工程壁垒；其中MaM-GPT作为世界模型（长程任务，持续理解物理世界），与VT-Transformer大模型加速计算框架（自我训练）、VT-Claw主动智能体计算框架（自治智能体）形成闭环，是闭环持续迭代的核心大脑。
+                    </div>
+                </div>
+                -->
+                
+                <!-- VLA Limitations -->
+                <div class="vla-limit-card mt-8 rounded-xl p-6" style="background: var(--bg-card); border-left: 4px solid #ff6b35; border: 1px solid var(--border-light);">
+                    <h4 class="text-[18px] font-bold" style="color: var(--text-primary);">端到端VLA可快速落地单场景，但跨场景迁移成本极高</h4>
+                    <p class="text-[16px] font-bold mt-4" style="color: #ff6b35;">变更应用场景，<span style="font-size: 28px;">90%</span>以上需要重新开发；变更机器人本体，<span style="font-size: 28px;">70%</span>以上需要重新开发</p>
+                    <p class="text-[14px] mt-4" style="color: var(--text-secondary);">MaM-GPT成熟商用分支（端到端工程方案）在跨场景迁移上存在客观局限，实景进化才是物理AI长期底座</p>
+                </div>
+            </div>
+            
+            <!-- Three Tech Routes Comparison -->
+            <div class="mt-12">
+                <div class="section-header">
+                    <h2 class="section-title">三大技术路线对比</h2>
+                    <span class="section-sub">通往通用世界模型的技术路径</span>
+                    <div class="section-divider"></div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-stretch justify-center gap-4 max-w-5xl mx-auto">
+                    <div class="tech-route-card w-full md:w-[30%] rounded-[8px] p-5" style="background: var(--bg-card); border-left: 3px solid var(--text-muted); border: 1px solid var(--border-light);">
+                        <div class="text-[15px] font-bold" style="color: var(--text-muted);">模拟仿真</div>
+                        <div class="text-[12px] uppercase tracking-wider mt-1" style="color: var(--text-muted);">Simulation-based</div>
+                        <p class="text-[13px] mt-4 leading-relaxed" style="color: var(--text-secondary);">依赖虚拟引擎生成训练数据，构建数字孪生环境进行学习，存在难以逾越的Sim-to-Real Gap</p>
+                    </div>
+                    <div class="tech-route-card w-full md:w-[30%] rounded-[8px] p-5" style="background: var(--bg-card); border-left: 3px solid var(--text-muted); border: 1px solid var(--border-light);">
+                        <div class="text-[15px] font-bold" style="color: var(--text-muted);">预测进化</div>
+                        <div class="text-[12px] uppercase tracking-wider mt-1" style="color: var(--text-muted);">Predictive Evolution</div>
+                        <p class="text-[13px] mt-4 leading-relaxed" style="color: var(--text-secondary);">基于隐空间预测学习，通过预训练预测未来状态，但停留学术框架阶段，缺乏工程落地验证</p>
+                    </div>
+                    <div class="tech-route-card w-full md:w-[30%] rounded-[8px] p-5" style="background: rgba(139,92,246,0.08); border-left: 3px solid #a855f7; border: 1px solid rgba(139,92,246,0.1);">
+                        <div class="text-[15px] font-bold" style="color: #a855f7;">实景进化</div>
+                        <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ml-2" style="background: rgba(139,92,246,0.15); color: #a855f7;">MaM-GPT专属</span>
+                        <div class="text-[12px] uppercase tracking-wider mt-1" style="color: #a855f7;">Real-World Evolution</div>
+                        <p class="text-[13px] mt-4 leading-relaxed" style="color: var(--text-secondary);">真实物理世界中直接学习，以MaM-GPT实景自我进化+VT-Transformer自治智能体执行为核心训练场，沉淀通用物理因果，已完成多场景工程验证</p>
+                    </div>
+                </div>
+                <p class="text-[13px] italic text-center mt-8" style="color: var(--text-muted);">前两条路线试图先构建一个"世界"再让AI学习，我们是让AI直接在真实世界中学习</p>
+            </div>
+            
+            <div class="mt-8">
+                <div class="section-header">
+                    <h2 class="section-title">核心差异速览</h2>
+                    <span class="section-sub">两代架构关键区别一屏掌握</span>
+                    <div class="section-divider"></div>
+                </div>
+                
+                <div class="diff-summary">
+                <div class="diff-col">
+                    <div class="diff-tags">
+                        <span class="diff-tag-vla">VLA · 过渡方案</span>
+                        <span class="diff-tag-ulp">ULP · 终局方案</span>
+                    </div>
+                    <div class="diff-col-label">场景适配</div>
+                    <div class="diff-content-b">
+                        <div class="diff-text-vla">单场景深度定制</div>
+                        <div class="step-evolution">
+                            <svg class="step-arrow-svg" viewBox="0 0 28 20" fill="none">
+                                <defs>
+                                    <linearGradient id="stepGrad1" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#FF6B35" stop-opacity="0.8"/>
+                                        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.8"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M2 18L10 18L10 8L18 8L18 2L26 2" stroke="url(#stepGrad1)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L26 2L26 6" stroke="url(#stepGrad1)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="step-label">迭代升级</span>
+                        </div>
+                        <div class="diff-text-ulp">全场景通用泛化</div>
+                    </div>
+                </div>
+                <div class="diff-col">
+                    <div class="diff-tags">
+                        <span class="diff-tag-vla">VLA · 过渡方案</span>
+                        <span class="diff-tag-ulp">ULP · 终局方案</span>
+                    </div>
+                    <div class="diff-col-label">开发成本</div>
+                    <div class="diff-content-b">
+                        <div class="diff-text-vla">逐项目定制开发</div>
+                        <div class="step-evolution">
+                            <svg class="step-arrow-svg" viewBox="0 0 28 20" fill="none">
+                                <defs>
+                                    <linearGradient id="stepGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#FF6B35" stop-opacity="0.8"/>
+                                        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.8"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M2 18L10 18L10 8L18 8L18 2L26 2" stroke="url(#stepGrad2)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L26 2L26 6" stroke="url(#stepGrad2)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="step-label">迭代升级</span>
+                        </div>
+                        <div class="diff-text-ulp">一套模型全行业</div>
+                    </div>
+                </div>
+                <div class="diff-col">
+                    <div class="diff-tags">
+                        <span class="diff-tag-vla">VLA · 过渡方案</span>
+                        <span class="diff-tag-ulp">ULP · 终局方案</span>
+                    </div>
+                    <div class="diff-col-label">业务定位</div>
+                    <div class="diff-content-b">
+                        <div class="diff-text-vla">当前成熟营收底座</div>
+                        <div class="step-evolution">
+                            <svg class="step-arrow-svg" viewBox="0 0 28 20" fill="none">
+                                <defs>
+                                    <linearGradient id="stepGrad3" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#FF6B35" stop-opacity="0.8"/>
+                                        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.8"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M2 18L10 18L10 8L18 8L18 2L26 2" stroke="url(#stepGrad3)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L26 2L26 6" stroke="url(#stepGrad3)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="step-label">迭代升级</span>
+                        </div>
+                        <div class="diff-text-ulp">长期技术壁垒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arch-card ulp">
+                <div class="arch-tag ulp">技术愿景 · 海洋验证中</div>
+                <div class="arch-title">MaM-GPT（ULP 统一隐空间预测架构）</div>
+                <div class="arch-sub">面向全行业通用化的下一代技术底座</div>
+                <div class="arch-items">
+                    <div class="arch-item">
+                        <svg class="arch-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                        <div class="arch-item-body"><strong>技术革新</strong> — 跳出传统分模块建模思路，构建统一物理隐空间，学习通用时空物理因果规律</div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <svg class="arch-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M12 8v4M12 16h.01"/>
+                        </svg>
+                        <div class="arch-item-body"><strong>训练场景</strong> — 依托海洋超高维多场耦合实景数据完成预训练，实现高维向低维场景自然泛化</div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <svg class="arch-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        <div class="arch-item-body"><strong>核心突破</strong> — 物理信号层面归一化，高维场景训练、低维场景轻量化迁移，大幅降低新场景适配成本</div>
+                    </div>
+                    
+                    <div class="arch-item">
+                        <svg class="arch-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                        </svg>
+                        <div class="arch-item-body"><strong>当前进展</strong> — 海洋场景持续训练迭代中</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8">
+                <div class="section-header">
+                    <h2 class="section-title">MaM-GPT 双阶段技术路线</h2>
+                    <p class="section-sub">全维度技术能力拆解</p>
+                    <div class="section-divider"></div>
+                </div>
+                <table class="compare-table">
+                <tr>
+                    <th>维度</th>
+                    <th class="col-vla">阶段一：成熟商用分支（当前全行业交付）</th>
+                    <th class="col-ulp">阶段二：ULP统一隐空间底层架构（长期核心技术）</th>
+                </tr>
+                <tr class="diff-row">
+                    <td>架构思路</td>
+                    <td>分模块建模，端到端低维特征对齐，视觉-语言-动作协同优化</td>
+                    <td>统一物理隐空间，信号层面归一化，学习通用时空因果规律</td>
+                </tr>
+                <tr class="diff-row">
+                    <td>适用场景</td>
+                    <td>垂直行业单一场景深度适配与交付</td>
+                    <td>跨行业、跨硬件通用化场景部署</td>
+                </tr>
+                <tr class="diff-row">
+                    <td>泛化能力</td>
+                    <td>单场景适配优异，跨场景70%+需重新开发</td>
+                    <td>新场景轻量适配，成本降低70%</td>
+                </tr>
+                <tr>
+                    <td>训练数据</td>
+                    <td>垂直行业场景专项数据</td>
+                    <td>海洋多维实景数据持续训练</td>
+                </tr>
+                <tr>
+                    <td>部署成本</td>
+                    <td>新项目需进行场景适配</td>
+                    <td>一套模型兼容全行业，成本显著降低</td>
+                </tr>
+                <tr>
+                    <td>当前阶段</td>
+                    <td>已规模化商用交付</td>
+                    <td>海洋场景持续迭代优化中</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Impossible Triangle -->
+        <div class="mt-16">
+            <div class="section-header">
+                <h2 class="section-title">世界模型不可能三角</h2>
+                <span class="section-sub">三者兼顾的工程挑战</span>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="rounded-xl p-8" style="background: var(--bg-card); border: 1px solid var(--border-light);">
+                <div class="relative h-[380px] max-w-lg mx-auto" id="triangle-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380" class="w-full h-full">
+                        <defs>
+                            <filter id="mamGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                            <radialGradient id="mamExpand" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="rgba(124,58,237,0.35)"/>
+                                <stop offset="50%" stop-color="rgba(124,58,237,0.18)"/>
+                                <stop offset="100%" stop-color="rgba(124,58,237,0.06)"/>
+                            </radialGradient>
+                        </defs>
+                        
+                        <!-- 步骤1：灰色外框三角形（静态） -->
+                        <polygon points="200,50 50,330 350,330" fill="none" stroke="#9CA3AF" stroke-width="2.5"/>
+                        
+                        <!-- 三个顶点圆点（静态） -->
+                        <circle cx="200" cy="50" r="10" fill="#0066FF"/>
+                        <circle cx="50" cy="330" r="10" fill="#0891B2"/>
+                        <circle cx="350" cy="330" r="10" fill="#7C3AED"/>
+                        
+                        <!-- 顶点文字（外移，静态） -->
+                        <text x="200" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#0066FF">全域泛化</text>
+                        <text x="30" y="355" text-anchor="middle" font-size="14" font-weight="700" fill="#0891B2">物理保真</text>
+                        <text x="370" y="355" text-anchor="middle" font-size="14" font-weight="700" fill="#7C3AED">实时边缘</text>
+                        
+                        <!-- 步骤2：中心灰色圆点出现 -->
+                        <circle cx="200" cy="230" r="8" fill="#9CA3AF" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/>
+                            <animate attributeName="opacity" from="1" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </circle>
+                        
+                        <!-- 线1：中心 → 靠近全域泛化的小三角形顶点(200,101) -->
+                        <line x1="200" y1="230" x2="200" y2="101" stroke="#9CA3AF" stroke-width="1.5"
+                              stroke-dasharray="129" stroke-dashoffset="129" opacity="0">
+                            <animate attributeName="stroke-dashoffset" from="129" to="0" dur="0.6s" begin="1s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0" to="0.8" dur="0.3s" begin="1s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.8" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </line>
+                        
+                        <!-- 线2：中心 → 靠近物理保真的小三角形顶点(132,280) -->
+                        <line x1="200" y1="230" x2="132" y2="280" stroke="#9CA3AF" stroke-width="1.5"
+                              stroke-dasharray="79" stroke-dashoffset="79" opacity="0">
+                            <animate attributeName="stroke-dashoffset" from="79" to="0" dur="0.6s" begin="1.2s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0" to="0.8" dur="0.3s" begin="1.2s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.8" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </line>
+                        
+                        <!-- 线3：中心 → 靠近实时边缘的小三角形顶点(268,280) -->
+                        <line x1="200" y1="230" x2="268" y2="280" stroke="#9CA3AF" stroke-width="1.5"
+                              stroke-dasharray="79" stroke-dashoffset="79" opacity="0">
+                            <animate attributeName="stroke-dashoffset" from="79" to="0" dur="0.6s" begin="1.4s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0" to="0.8" dur="0.3s" begin="1.4s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.8" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </line>
+                        
+                        <!-- 步骤3：不规则小三角形闭合 -->
+                        <polygon points="200,101 132,280 268,280"
+                                 fill="none" stroke="#9CA3AF" stroke-width="1.5"
+                                 stroke-dasharray="481" stroke-dashoffset="481" opacity="0">
+                            <animate attributeName="stroke-dashoffset" from="481" to="0" dur="0.8s" begin="1.8s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0" to="0.7" dur="0.4s" begin="1.8s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.7" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </polygon>
+                        
+                        <!-- 小三角形内部淡灰填充 -->
+                        <polygon points="200,101 132,280 268,280" fill="rgba(156,163,175,0.15)" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.2s" fill="freeze"/>
+                            <animate attributeName="opacity" from="1" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </polygon>
+                        
+                        <!-- 步骤4：行业常规水平文字 -->
+                        <text x="200" y="210" text-anchor="middle" font-size="12" fill="#6B7280" opacity="0">
+                            行业常规水平
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.8s" fill="freeze"/>
+                            <animate attributeName="opacity" from="1" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </text>
+                        <text x="200" y="228" text-anchor="middle" font-size="11" fill="#9CA3AF" opacity="0">
+                            无法同时满足
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="3.1s" fill="freeze"/>
+                            <animate attributeName="opacity" from="1" to="0" dur="0.4s" begin="3.8s" fill="freeze"/>
+                        </text>
+                        
+                        <!-- 步骤6：MaM-GPT紫色圆点出现 -->
+                        <circle cx="200" cy="230" r="14" fill="#7C3AED" filter="url(#mamGlow)" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="4.2s" fill="freeze"/>
+                        </circle>
+                        
+                        <!-- 步骤7：紫色圆点扩大覆盖全三角 -->
+                        <circle cx="200" cy="230" r="14" fill="url(#mamExpand)" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="4.7s" fill="freeze"/>
+                            <animate attributeName="r" from="14" to="170" dur="2.5s" begin="5s" fill="freeze"/>
+                        </circle>
+                        <circle cx="200" cy="230" r="14" fill="none" stroke="#7C3AED" stroke-width="2.5" opacity="0">
+                            <animate attributeName="r" from="14" to="170" dur="2.5s" begin="5s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.7" to="0" dur="2.5s" begin="5s" fill="freeze"/>
+                        </circle>
+                        <circle cx="200" cy="230" r="14" fill="none" stroke="#A78BFA" stroke-width="1.5" opacity="0">
+                            <animate attributeName="r" from="14" to="150" dur="2.5s" begin="5.5s" fill="freeze"/>
+                            <animate attributeName="opacity" from="0.5" to="0" dur="2.5s" begin="5.5s" fill="freeze"/>
+                        </circle>
+                        
+                        <!-- 步骤8：中心标注 + 顶点高亮 -->
+                        <rect x="145" y="208" width="110" height="48" rx="8" fill="rgba(0,0,0,0.6)" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="7.7s" fill="freeze"/>
+                        </rect>
+                        <text x="200" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="white" opacity="0">
+                            MaM-GPT
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="7.7s" fill="freeze"/>
+                        </text>
+                        <text x="200" y="248" text-anchor="middle" font-size="11" fill="white" opacity="0">
+                            工程最优解
+                            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="8s" fill="freeze"/>
+                        </text>
+                        <circle cx="200" cy="50" r="14" fill="#0066FF" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="8.2s" fill="freeze"/>
+                        </circle>
+                        <circle cx="50" cy="330" r="14" fill="#0891B2" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="8.4s" fill="freeze"/>
+                        </circle>
+                        <circle cx="350" cy="330" r="14" fill="#7C3AED" opacity="0">
+                            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="8.6s" fill="freeze"/>
+                        </circle>
+                    </svg>
+                </div>
+                
+                <!-- 图像外备注 -->
+                <div class="mam-remark">
+                    MaM-GPT 同步覆盖全域泛化、物理保真、实时边缘三个维度
+                </div>
+                
+                <p class="text-[16px] font-bold text-center mt-8" style="color: var(--text-primary);">我们不回避取舍，但让三者同步达到工业可用绝对阈值</p>
+                
+                <div class="max-w-2xl mx-auto mt-4 space-y-2">
+                    <p class="text-[13px] text-center" style="color: var(--text-secondary);">VLA在单点指标易突破，但三者同时满足工业级要求成本极高；</p>
+                    <p class="text-[13px] text-center" style="color: var(--text-secondary);">MaM-GPT依托ULP统一隐空间架构，在工程层面实现三者长期最优平衡。</p>
+                </div>
+            </div>
+            
+            <style>
+                .mam-remark {
+                    margin-top: 20px;
+                    padding: 14px 20px;
+                    background: linear-gradient(135deg, #F3E8FF, #EDE9FE);
+                    border-radius: 12px;
+                    border: 1px solid #DDD6FE;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #7C3AED;
+                    opacity: 0;
+                    animation: fadeInRemark 0.6s ease forwards;
+                    animation-delay: 9s;
+                    text-align: center;
+                }
+                @keyframes fadeInRemark {
+                    from { opacity: 0; transform: translateY(8px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @media (max-width: 768px) {
+                    #triangle-container {
+                        width: 85%;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+            </style>
+        </div>
+        
+        <!-- Why Ocean -->
+        <div class="mt-16" style="background: var(--bg-primary); padding: 80px 0;">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[28px] md:text-[40px] font-black" style="color: var(--text-primary);">为什么选择海洋：物理AI的天然考场</h2>
+                    <p class="text-[16px] md:text-[18px] mt-4 max-w-2xl mx-auto" style="color: var(--text-secondary);">海洋是维度最丰富、物理耦合关系最复杂的实景场景，是训练通用世界模型的天然考场</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="rounded-2xl p-7 border transition-all duration-300 hover:shadow-lg" style="background: var(--bg-card); border-color: var(--border-light);">
+                        <div class="flex items-center gap-4 mb-5">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(0,212,255,0.1);">
+                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="18" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="4,2"/>
+                                    <path d="M20 4 L20 14 M20 26 L20 36 M4 20 L14 20 M26 20 L36 20" stroke="var(--accent-cyan)" stroke-width="2"/>
+                                    <circle cx="20" cy="20" r="4" fill="var(--accent-cyan)"/>
+                                    <circle cx="7" cy="20" r="2.5" fill="var(--accent-cyan)" opacity="0.7"/>
+                                    <circle cx="33" cy="20" r="2.5" fill="var(--accent-cyan)" opacity="0.7"/>
+                                    <circle cx="20" cy="7" r="2.5" fill="var(--accent-cyan)" opacity="0.7"/>
+                                    <circle cx="20" cy="33" r="2.5" fill="var(--accent-cyan)" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-[18px] md:text-[20px] font-bold" style="color: var(--accent-cyan);">高维信号空间</h3>
+                        </div>
+                        <p class="text-[14px] md:text-[15px] leading-relaxed" style="color: var(--text-secondary);">海图、水文、声呐、气象、电磁等十余类异构数据，构成最复杂的物理信号耦合系统，是验证世界模型理解能力的最佳数据集。</p>
+                    </div>
+                    
+                    <div class="rounded-2xl p-7 border transition-all duration-300 hover:shadow-lg" style="background: var(--bg-card); border-color: var(--border-light);">
+                        <div class="flex items-center gap-4 mb-5">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(0,212,255,0.1);">
+                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <rect x="6" y="10" width="28" height="22" rx="5" stroke="var(--accent-cyan)" stroke-width="2"/>
+                                    <circle cx="15" cy="17" r="4" fill="var(--accent-cyan)"/>
+                                    <rect x="22" y="15" width="10" height="5" rx="2" stroke="var(--accent-cyan)" stroke-width="2"/>
+                                    <rect x="12" y="24" width="16" height="5" rx="2" fill="var(--accent-cyan)" opacity="0.4"/>
+                                    <path d="M2 30 Q20 38 38 30" stroke="var(--accent-cyan)" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.6"/>
+                                    <circle cx="2" cy="30" r="1.5" fill="var(--accent-cyan)" opacity="0.6"/>
+                                    <circle cx="38" cy="30" r="1.5" fill="var(--accent-cyan)" opacity="0.6"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-[18px] md:text-[20px] font-bold" style="color: var(--accent-cyan);">工程硬约束验证</h3>
+                        </div>
+                        <p class="text-[14px] md:text-[15px] leading-relaxed" style="color: var(--text-secondary);">算力上限、模型参数尺寸、设备功耗极限——三大不可规避的硬件级约束，倒逼AI在极限条件下进化，而非依赖云端无限堆算力。</p>
+                    </div>
+                    
+                    <div class="rounded-2xl p-7 border transition-all duration-300 hover:shadow-lg" style="background: var(--bg-card); border-color: var(--border-light);">
+                        <div class="flex items-center gap-4 mb-5">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(0,212,255,0.1);">
+                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <path d="M20 6 L29 20 L20 34 L11 20 Z" stroke="var(--accent-cyan)" stroke-width="2"/>
+                                    <path d="M20 20 L29 20 M20 20 L20 34 M20 20 L11 20" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+                                    <circle cx="20" cy="6" r="3" fill="var(--accent-cyan)"/>
+                                    <circle cx="33" cy="20" r="3" fill="var(--accent-cyan)"/>
+                                    <circle cx="20" cy="34" r="3" fill="var(--accent-cyan)"/>
+                                    <circle cx="7" cy="20" r="3" fill="var(--accent-cyan)"/>
+                                    <path d="M33 20 L39 17 M33 20 L39 23" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+                                    <path d="M20 34 L17 40 M20 34 L23 40" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-[18px] md:text-[20px] font-bold" style="color: var(--accent-cyan);">高价值产业化空间</h3>
+                        </div>
+                        <p class="text-[14px] md:text-[15px] leading-relaxed" style="color: var(--text-secondary);">覆盖航运、渔港、岸基监测、水下探测、海事安防等全链条场景，是物理AI从验证到规模化落地的最佳路径。</p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-16">
+                    <p class="text-[18px] md:text-[20px] font-bold" style="color: var(--text-primary);">「从海洋高维实景场景起步，向全品类物理场景拓展落地」</p>
+                </div>
+                
+                <div class="text-center mt-8">
+                    <a href="investor-abyss.html" class="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:brightness-110 hover:shadow-xl" style="background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: white;">
+                        查看海洋具身智能训练场景 →
+                    </a>
+                </div>
+            </div>
+        </div>
+            
+            <div class="mt-16 pt-16 border-t" style="border-color: var(--border-light);">
+                <div class="section-header">
+                    <h2 class="section-title" style="font-size: 32px; font-weight: bold;">从感知到认知到进化</h2>
+                    <p class="section-sub" style="font-size: 16px;">MaM-GPT 在真实物理世界中持续闭环</p>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="relative">
+                    <svg class="loop-arc" viewBox="0 0 600 60" fill="none">
+                        <path d="M520 45 C 520 10, 80 10, 80 45" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+                        <polygon points="75,42 80,48 85,42" fill="#8B5CF6" opacity="0.5"/>
+                    </svg>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-8">
+                <div class="narrative-card-1 w-full md:w-[28%] rounded-[12px] p-8 border" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-[14px] font-bold" style="color: #ff6b35;">01</span>
+                        <h3 class="text-[18px] font-bold" style="color: var(--text-primary);">实景感知</h3>
+                    </div>
+                    <div class="w-20 h-20 mx-auto mb-6 relative">
+                        <svg viewBox="0 0 80 80" class="w-full h-full">
+                            <circle cx="40" cy="40" r="6" fill="#FF6B35" class="animate-breathe-3s"/>
+                            <circle cx="40" cy="40" r="15" fill="none" stroke="#FF6B35" stroke-width="1" opacity="0" class="animate-ripple-outer"/>
+                            <circle cx="40" cy="40" r="25" fill="none" stroke="#FF6B35" stroke-width="1" opacity="0" class="animate-ripple-inner"/>
+                        </svg>
+                    </div>
+                    <p class="text-[14px] leading-relaxed text-center" style="color: var(--text-secondary);">从物理世界采集多维数据，构建真实场景的数字映射</p>
+                </div>
+                <div class="flex-shrink-0 narrative-connector narrative-connector-1">
+                    <div class="relative w-[100px] h-[2px] hidden md:block">
+                        <svg viewBox="0 0 100 2" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="cmg-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color: var(--accent-cyan);"/>
+                                    <stop offset="100%" style="stop-color: #ff6b35;"/>
+                                </linearGradient>
+                            </defs>
+                            <line x1="0" y1="1" x2="100" y2="1" stroke="url(#cmg-1)" stroke-width="2"/>
+                            <circle cx="50" cy="1" r="4" fill="#ff6b35" class="animate-breathe-2s"/>
+                        </svg>
+                        <div class="pulse-dot"></div>
+                        <div class="pulse-tail"></div>
+                    </div>
+                    <div class="relative w-[2px] h-[60px] md:hidden mx-auto">
+                        <svg viewBox="0 0 2 60" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="cmg-1v" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color: var(--accent-cyan);"/>
+                                    <stop offset="100%" style="stop-color: #ff6b35;"/>
+                                </linearGradient>
+                            </defs>
+                            <line x1="1" y1="0" x2="1" y2="60" stroke="url(#cmg-1v)" stroke-width="2"/>
+                        </svg>
+                        <div class="pulse-dot"></div>
+                        <div class="pulse-tail"></div>
+                    </div>
+                </div>
+                <div class="narrative-card-2 w-full md:w-[28%] rounded-[12px] p-8 border" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-[14px] font-bold" style="color: #ff6b35;">02</span>
+                        <h3 class="text-[18px] font-bold" style="color: var(--text-primary);">隐空间推理</h3>
+                    </div>
+                    <div class="w-20 h-20 mx-auto mb-6 relative">
+                        <svg viewBox="0 0 80 80" class="w-full h-full">
+                            <circle cx="40" cy="40" r="28" fill="none" stroke="#C084FC" stroke-width="1" stroke-dasharray="4 4" opacity="0.3"/>
+                            <circle cx="40" cy="40" r="20" fill="none" stroke="#C084FC" stroke-width="1" opacity="0.5"/>
+                            <circle cx="40" cy="40" r="8" fill="none" stroke="#C084FC" stroke-width="2"/>
+                            <circle cx="40" cy="40" r="2" fill="#C084FC" class="animate-breathe-3s"/>
+                            <path d="M40 12v6M40 62v6M12 40h6M62 40h6" stroke="#C084FC" stroke-width="1" opacity="0.6"/>
+                            <circle cx="40" cy="40" r="28" stroke-dasharray="10 5" stroke-dashoffset="0" stroke="#C084FC" stroke-width="1" fill="none" class="animate-rotate-cw-20s" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    <p class="text-[14px] leading-relaxed text-center" style="color: var(--text-secondary);">在统一隐空间中进行跨模态理解与物理推演</p>
+                </div>
+                <div class="flex-shrink-0 narrative-connector narrative-connector-2">
+                    <div class="relative w-[100px] h-[2px] hidden md:block">
+                        <svg viewBox="0 0 100 2" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="cmg-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color: var(--accent-cyan);"/>
+                                    <stop offset="100%" style="stop-color: #ff6b35;"/>
+                                </linearGradient>
+                            </defs>
+                            <line x1="0" y1="1" x2="100" y2="1" stroke="url(#cmg-2)" stroke-width="2"/>
+                            <circle cx="50" cy="1" r="4" fill="#ff6b35" class="animate-breathe-2s"/>
+                        </svg>
+                        <div class="pulse-dot"></div>
+                        <div class="pulse-tail"></div>
+                    </div>
+                    <div class="relative w-[2px] h-[60px] md:hidden mx-auto">
+                        <svg viewBox="0 0 2 60" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="cmg-2v" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color: var(--accent-cyan);"/>
+                                    <stop offset="100%" style="stop-color: #ff6b35;"/>
+                                </linearGradient>
+                            </defs>
+                            <line x1="1" y1="0" x2="1" y2="60" stroke="url(#cmg-2v)" stroke-width="2"/>
+                        </svg>
+                        <div class="pulse-dot"></div>
+                        <div class="pulse-tail"></div>
+                    </div>
+                </div>
+                <div class="narrative-card-3 w-full md:w-[28%] rounded-[12px] p-8 border" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-[14px] font-bold" style="color: #ff6b35;">03</span>
+                        <h3 class="text-[18px] font-bold" style="color: var(--text-primary);">MaM-GPT实景自我进化</h3>
+                    </div>
+                    <div class="w-20 h-20 mx-auto mb-6 relative">
+                        <svg viewBox="0 0 80 80" class="w-full h-full">
+                            <path d="M40 70 Q50 60 55 50 Q60 40 55 30 Q50 20 40 15 Q30 20 25 30 Q20 40 25 50 Q30 60 40 70" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200" class="animate-spiral-draw"/>
+                            <path d="M40 65 Q48 55 52 45 Q56 35 52 25 Q48 18 40 12 Q32 18 28 25 Q24 35 28 45 Q32 55 40 65" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="180" stroke-dashoffset="180" class="animate-spiral-draw" style="animation-delay: 2s;"/>
+                            <circle cx="40" cy="12" r="4" fill="#8B5CF6" class="animate-breathe-3s"/>
+                        </svg>
+                    </div>
+                    <p class="text-[14px] leading-relaxed text-center" style="color: var(--text-secondary);">依托海洋多维实景数据持续优化模型泛化能力，MaM-GPT沉淀执行数据，反哺优化VT-Claw规划精度，实现全类型实体场景通用适配</p>
+                </div>
+                    </div>
+                </div>
+            
+            <div class="text-center mt-8">
+                <p class="text-lg font-medium mb-6" style="color: var(--text-secondary);">真实世界是老师，学习永不停止，理解先于预测</p>
+                <a href="investor-abyss.html" class="mamgpt-btn inline-flex items-center gap-2 px-8 py-3 rounded-lg font-medium" style="background: var(--accent-purple); color: white;">
+                    查看深渊矩阵·海洋具身智能训练场景 →
+                    <svg class="mamgpt-btn-arrow w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer" class="py-12 px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <img id="footer-logo" src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto mb-4">
+                    <p class="text-sm" style="color: var(--text-muted);">让AI落地物理世界</p>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4" style="color: var(--text-primary);">快速链接</h4>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">首页</a>
+                        <a href="investor-mamgpt.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">MaM-GPT 世界模型</a>
+                        <a href="investor-abyss.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">深渊矩阵</a>
+                        <a href="customer-agibox.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">AGI Box</a>
+                    </div>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">© 2026 云锦微VIITRIX</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isLightTheme = false;
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            const body = document.body;
+            const navLogo = document.querySelector('nav img');
+            const footerLogo = document.getElementById('footer-logo');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const mobileThemeIconDark = document.getElementById('mobile-theme-icon-dark');
+            const mobileThemeIconLight = document.getElementById('mobile-theme-icon-light');
+
+            const mamgptHero = document.getElementById('mamgpt-hero');
+            const mamgptVideoDark = document.getElementById('mamgpt-video-dark');
+            const mamgptVideoWhite = document.getElementById('mamgpt-video-white');
+            const mamgptHeroTag = document.getElementById('mamgpt-hero-tag');
+            const mamgptHeroTitle = document.getElementById('mamgpt-hero-title');
+            const mamgptHeroDesc = document.getElementById('mamgpt-hero-desc');
+            const mamgptHeroTransition = document.getElementById('mamgpt-hero-transition');
+
+            if (isLightTheme) {
+                body.classList.add('light-theme');
+                if (navLogo) navLogo.src = 'images/logo-white.png';
+                if (footerLogo) footerLogo.src = 'images/logo-white.png';
+                if (themeIconDark) themeIconDark.classList.add('hidden');
+                if (themeIconLight) themeIconLight.classList.remove('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.add('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.remove('hidden');
+                
+                if (mamgptHero) mamgptHero.style.background = '#ffffff';
+                if (mamgptVideoDark) {
+                    mamgptVideoDark.style.display = 'none';
+                    mamgptVideoDark.pause();
+                }
+                if (mamgptVideoWhite) {
+                    mamgptVideoWhite.style.display = 'block';
+                    mamgptVideoWhite.play();
+                }
+                if (mamgptHeroTag) mamgptHeroTag.style.color = '#0088cc';
+                if (mamgptHeroTitle) mamgptHeroTitle.style.color = '#111827';
+                if (mamgptHeroDesc) mamgptHeroDesc.style.color = '#6b7280';
+                if (mamgptHeroTransition) mamgptHeroTransition.style.background = 'linear-gradient(to bottom, #ffffff, #f8f9fa)';
+            } else {
+                body.classList.remove('light-theme');
+                if (navLogo) navLogo.src = 'images/logo.png';
+                if (footerLogo) footerLogo.src = 'images/logo.png';
+                if (themeIconDark) themeIconDark.classList.remove('hidden');
+                if (themeIconLight) themeIconLight.classList.add('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.remove('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.add('hidden');
+                
+                if (mamgptHero) mamgptHero.style.background = '#0B1220';
+                if (mamgptVideoDark) {
+                    mamgptVideoDark.style.display = 'block';
+                    mamgptVideoDark.play();
+                }
+                if (mamgptVideoWhite) {
+                    mamgptVideoWhite.style.display = 'none';
+                    mamgptVideoWhite.pause();
+                }
+                if (mamgptHeroTag) mamgptHeroTag.style.color = '#00d4ff';
+                if (mamgptHeroTitle) mamgptHeroTitle.style.color = '#ffffff';
+                if (mamgptHeroDesc) mamgptHeroDesc.style.color = 'rgba(255,255,255,0.7)';
+                if (mamgptHeroTransition) mamgptHeroTransition.style.background = 'linear-gradient(to bottom, #0B1220, #0a0e17)';
+            }
+            localStorage.setItem('viitrix-theme', isLightTheme ? 'light' : 'dark');
+        }
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
+        const savedTheme = localStorage.getItem('viitrix-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+
+        const scrollBtn = document.getElementById('scroll-to-intro');
+        const introSection = document.getElementById('mamgpt-intro');
+        if (scrollBtn && introSection) {
+            scrollBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                introSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        const scrollButton = document.getElementById('scroll-to-intro');
+        if (scrollButton) {
+            scrollButton.addEventListener('mouseenter', () => {
+                scrollButton.style.transform = 'translateY(-2px)';
+                scrollButton.style.boxShadow = '0 4px 20px rgba(0,136,204,0.3)';
+            });
+            scrollButton.addEventListener('mouseleave', () => {
+                scrollButton.style.transform = 'translateY(0)';
+                scrollButton.style.boxShadow = 'none';
+            });
+        }
+
+        const heroSection = document.getElementById('mamgpt-hero');
+        const heroVideo = document.getElementById('mamgpt-banner-video');
+        const heroTransition = document.getElementById('hero-transition');
+        
+        function updateHeroBackground() {
+            if (!heroVideo || !heroSection) return;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            if (!ctx || heroVideo.videoWidth === 0 || heroVideo.videoHeight === 0) {
+                heroSection.style.backgroundColor = '#ececec';
+                return;
+            }
+            
+            canvas.width = heroVideo.videoWidth;
+            canvas.height = heroVideo.videoHeight;
+            
+            try {
+                ctx.drawImage(heroVideo, 0, 0, canvas.width, canvas.height);
+                
+                const corners = [
+                    ctx.getImageData(0, 0, 1, 1).data,
+                    ctx.getImageData(canvas.width - 1, 0, 1, 1).data,
+                    ctx.getImageData(0, canvas.height - 1, 1, 1).data,
+                    ctx.getImageData(canvas.width - 1, canvas.height - 1, 1, 1).data
+                ];
+                
+                let r = 0, g = 0, b = 0;
+                corners.forEach(c => {
+                    r += c[0];
+                    g += c[1];
+                    b += c[2];
+                });
+                
+                r = Math.round(r / 4);
+                g = Math.round(g / 4);
+                b = Math.round(b / 4);
+                
+                const color = `rgb(${r}, ${g}, ${b})`;
+                heroSection.style.backgroundColor = color;
+                
+                if (heroTransition) {
+                    heroTransition.style.background = `linear-gradient(to bottom, ${color}, #ffffff)`;
+                }
+            } catch (e) {
+                heroSection.style.backgroundColor = '#ececec';
+                if (heroTransition) {
+                    heroTransition.style.background = 'linear-gradient(to bottom, #ececec, #ffffff)';
+                }
+            }
+        }
+        
+        if (heroVideo) {
+            heroVideo.addEventListener('loadeddata', updateHeroBackground);
+            
+            setInterval(() => {
+                if (!heroVideo.paused && heroVideo.currentTime > 0) {
+                    updateHeroBackground();
+                }
+            }, 5000);
+            
+            updateHeroBackground();
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        document.querySelector('.accordion-header').addEventListener('click', () => {
+            const content = document.getElementById('accordion-content');
+            const icon = document.getElementById('accordion-icon');
+            const table = document.querySelector('.compare-table');
+            content.classList.toggle('open');
+            icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            if (table) {
+                table.classList.toggle('expanded');
+            }
+        });
+
+        // MaM-GPT Cards Animation
+        const vlaCard = document.querySelector('.mamgpt-card-vla');
+        const ulpCard = document.querySelector('.mamgpt-card-ulp');
+        
+        if (vlaCard && ulpCard) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        vlaCard.classList.add('animate');
+                        setTimeout(() => {
+                            ulpCard.classList.add('animate');
+                        }, 200);
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.2 });
+            observer.observe(vlaCard);
+        }
+
+        const parallaxElements = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.1;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }, { passive: true });
+    </script>
+</body>
+</html>

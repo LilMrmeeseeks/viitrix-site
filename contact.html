@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 - 云锦微VIITRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #05080f;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00d4ff;
+            --border-light: rgba(255,255,255,0.05);
+            --border-medium: rgba(255,255,255,0.1);
+            --nav-bg: rgba(10,14,23,0.85);
+            --nav-border: rgba(255,255,255,0.05);
+        }
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #f8f9fa;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #0088cc;
+            --border-light: rgba(0,0,0,0.06);
+            --border-medium: rgba(0,0,0,0.1);
+            --nav-bg: rgba(255,255,255,0.9);
+            --nav-border: rgba(0,0,0,0.06);
+        }
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .active-nav {
+            color: var(--accent-cyan) !important;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link[data-page="mam"]::after { background: var(--accent-purple); }
+        .nav-link[data-page="ocean"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="agibox"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="scenarios"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="about"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="contact"]::after { background: var(--text-primary); }
+        .parallax-bg {
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-xl border-b transition-all duration-300" style="background: var(--nav-bg); border-color: var(--nav-border);">
+        <div class="max-w-7xl mx-auto h-full px-4 lg:px-8 flex items-center justify-between">
+            <a href="index.html"><img src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="index.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="mam">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="ocean">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="agibox">AGI Box 全域边端智能基座</a>
+                <a href="scenarios.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="scenarios">落地场景</a>
+                <a href="about.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="about">关于我们</a>
+                <a href="contact.html" class="nav-link active active-nav font-medium" data-page="contact">联系我们</a>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle-btn" class="flex items-center justify-center w-10 h-10 rounded-lg transition-colors" style="background: var(--bg-card); border-color: var(--border-light); border: 1px solid;">
+                    <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2" style="color: var(--text-primary);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden border-t hidden transition-all duration-300" style="background: var(--bg-primary); border-color: var(--nav-border);">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AGI Box 全域边端智能基座</a>
+                <a href="scenarios.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">落地场景</a>
+                <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">关于我们</a>
+                <a href="contact.html" class="block font-medium text-[var(--accent-cyan)]">联系我们</a>
+                <button id="mobile-theme-toggle" class="w-full flex items-center justify-center gap-2 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                    <svg id="mobile-theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-[120px] px-4" style="background: #FAFBFC;">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-[36px] md:text-[48px] font-black" style="color: var(--text-primary);">联系我们</h1>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">咨询服务</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="rounded-xl p-8 border" style="background: var(--bg-card); border-color: rgba(0,136,204,0.15);">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background: rgba(0,136,204,0.1);">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-cyan);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-[20px] font-bold mb-4" style="color: var(--text-primary);">商务合作</h3>
+                    <p class="text-[14px] leading-relaxed" style="color: var(--text-secondary);">面向政企客户、系统集成商、渠道合作伙伴，提供AGI Box硬件咨询、行业定制方案、项目落地部署全流程支持服务</p>
+                </div>
+                
+                <div class="rounded-xl p-8 border" style="background: var(--bg-card); border-color: rgba(255,107,53,0.15);">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background: rgba(255,107,53,0.1);">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--accent-orange);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-[20px] font-bold mb-4" style="color: var(--text-primary);">技术咨询</h3>
+                    <p class="text-[14px] leading-relaxed" style="color: var(--text-secondary);">面向科研机构、产业技术伙伴、行业技术调研单位，提供MaM-GPT世界模型、海洋具身智能体系深度技术交流与技术合作洽谈</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[80px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-[28px] font-bold text-center mb-12" style="color: var(--text-primary);">联系方式</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="rounded-xl p-6 border transition-all duration-300 flex flex-col" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <h4 class="text-[18px] font-bold mb-3" style="color: var(--text-primary);">上海</h4>
+                    <p class="text-[14px] leading-relaxed" style="color: var(--text-secondary); min-height: 64px;">上海市丹桂路799号张江国创中心三期5号楼 浙江大学上海高等研究院3楼</p>
+                    <div class="space-y-2 mt-4">
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">销售：</span>池先生 <a href="tel:13701877863" class="hover:underline" style="color: var(--accent-cyan);">13701877863</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:chiwenzhe@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">chiwenzhe@viitrix.com</a></p>
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">商务：</span>仪先生 <a href="tel:13923788655" class="hover:underline" style="color: var(--accent-cyan);">13923788655</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:yihaibo@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">yihaibo@viitrix.com</a></p>
+                    </div>
+                    <p class="text-[12px] mt-auto pt-4" style="color: var(--text-muted);">项目采购、方案洽谈可对接各地销售专员；技术研发、学术交流可对接技术咨询通道</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border transition-all duration-300 flex flex-col" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <h4 class="text-[18px] font-bold mb-3" style="color: var(--text-primary);">宁波</h4>
+                    <p class="text-[14px] leading-relaxed" style="color: var(--text-secondary); min-height: 64px;">宁波市余姚市俞家桥路131号4层C04-C05室</p>
+                    <div class="space-y-2 mt-4">
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">销售：</span>池先生 <a href="tel:13701877863" class="hover:underline" style="color: var(--accent-cyan);">13701877863</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:chiwenzhe@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">chiwenzhe@viitrix.com</a></p>
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">商务：</span>仪先生 <a href="tel:13923788655" class="hover:underline" style="color: var(--accent-cyan);">13923788655</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:yihaibo@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">yihaibo@viitrix.com</a></p>
+                    </div>
+                    <p class="text-[12px] mt-auto pt-4" style="color: var(--text-muted);">项目采购、方案洽谈可对接各地销售专员；技术研发、学术交流可对接技术咨询通道</p>
+                </div>
+                
+                <div class="rounded-xl p-6 border transition-all duration-300 flex flex-col" style="background: var(--bg-card); border-color: var(--border-light);">
+                    <h4 class="text-[18px] font-bold mb-3" style="color: var(--text-primary);">深圳</h4>
+                    <p class="text-[14px] leading-relaxed" style="color: var(--text-secondary); min-height: 64px;">深圳市南山区清华信息港科研楼8楼804室</p>
+                    <div class="space-y-2 mt-4">
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">销售：</span>胡先生 <a href="tel:19613007398" class="hover:underline" style="color: var(--accent-cyan);">19613007398</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:hudi@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">hudi@viitrix.com</a></p>
+                        <p class="text-[14px] whitespace-normal md:whitespace-nowrap" style="color: var(--text-secondary);"><span style="color: var(--text-muted);">商务：</span>仪先生 <a href="tel:13923788655" class="hover:underline" style="color: var(--accent-cyan);">13923788655</a> <span style="color: var(--text-muted);">|</span> <a href="mailto:yihaibo@viitrix.com" class="hover:underline" style="color: var(--accent-cyan);">yihaibo@viitrix.com</a></p>
+                    </div>
+                    <p class="text-[12px] mt-auto pt-4" style="color: var(--text-muted);">项目采购、方案洽谈可对接各地销售专员；技术研发、学术交流可对接技术咨询通道</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer id="footer" class="py-12 px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <img id="footer-logo" src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto mb-4">
+                    <p class="text-sm" style="color: var(--text-muted);">让AI落地物理世界</p>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4" style="color: var(--text-primary);">快速链接</h4>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">首页</a>
+                        <a href="investor-mamgpt.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">MaM-GPT世界模型</a>
+                        <a href="investor-abyss.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">深渊矩阵·海洋具身智能</a>
+                        <a href="customer-agibox.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">AGI Box物理AI边缘大脑</a>
+                        <a href="scenarios.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">落地场景</a>
+                        <a href="about.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">关于我们</a>
+                    </div>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">© 2026 云锦微VIITRIX</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isLightTheme = false;
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            const body = document.body;
+            const navLogo = document.querySelector('nav img');
+            const footerLogo = document.getElementById('footer-logo');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const mobileThemeIconDark = document.getElementById('mobile-theme-icon-dark');
+            const mobileThemeIconLight = document.getElementById('mobile-theme-icon-light');
+            if (isLightTheme) {
+                body.classList.add('light-theme');
+                if (navLogo) navLogo.src = 'images/logo-white.png';
+                if (footerLogo) footerLogo.src = 'images/logo-white.png';
+                if (themeIconDark) themeIconDark.classList.add('hidden');
+                if (themeIconLight) themeIconLight.classList.remove('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.add('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.remove('hidden');
+            } else {
+                body.classList.remove('light-theme');
+                if (navLogo) navLogo.src = 'images/logo.png';
+                if (footerLogo) footerLogo.src = 'images/logo.png';
+                if (themeIconDark) themeIconDark.classList.remove('hidden');
+                if (themeIconLight) themeIconLight.classList.add('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.remove('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.add('hidden');
+            }
+            localStorage.setItem('viitrix-theme', isLightTheme ? 'light' : 'dark');
+        }
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
+        const savedTheme = localStorage.getItem('viitrix-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        const parallaxElements = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.1;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }, { passive: true });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1234 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深渊矩阵·海洋具身智能 - 云锦微VIITRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #05080f;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #a855f7;
+            --border-light: rgba(255,255,255,0.05);
+            --border-medium: rgba(255,255,255,0.1);
+            --nav-bg: rgba(10,14,23,0.85);
+            --nav-border: rgba(255,255,255,0.05);
+            --ocean-bottom: #0a1217;
+        }
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #f8f9fa;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #0088cc;
+            --accent-purple: #9333ea;
+            --border-light: rgba(0,0,0,0.06);
+            --border-medium: rgba(0,0,0,0.1);
+            --nav-bg: rgba(255,255,255,0.9);
+            --nav-border: rgba(0,0,0,0.06);
+            --ocean-bottom: #F7FCFB;
+        }
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .active-nav {
+            color: var(--accent-purple) !important;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link[data-page="mam"]::after { background: var(--accent-purple); }
+        .nav-link[data-page="ocean"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="agibox"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="scenarios"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="about"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="contact"]::after { background: var(--text-primary); }
+        .parallax-bg {
+            will-change: transform;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Button Hover Animation */
+        .abyss-btn {
+            transition: all 0.3s ease-out;
+        }
+        .abyss-btn:hover {
+            background: #0088cc;
+        }
+        .abyss-btn-arrow {
+            transition: transform 0.3s ease-out;
+        }
+        .abyss-btn:hover .abyss-btn-arrow {
+            transform: translateX(6px);
+        }
+        
+        /* Ocean Section Vertical Line */
+        .ocean-section {
+            position: relative;
+            padding-left: 32px;
+        }
+        .ocean-section::before {
+            content: '';
+            position: absolute;
+            left: 8px; top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom,
+                rgba(255,255,255,0.08) 0%,
+                rgba(0,212,255,0.2) 50%,
+                rgba(255,255,255,0.08) 100%);
+        }
+        .ocean-section .section-dot {
+            position: absolute;
+            left: 4px; top: 24px;
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-cyan);
+            background: transparent;
+            transition: all 0.4s ease;
+        }
+        .ocean-section.active .section-dot {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(0,212,255,0.3);
+        }
+        
+        /* Capability Tags */
+        .capability-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .capability-tags span {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: rgba(242,243,245,0.3);
+            color: var(--text-secondary);
+        }
+        
+        /* Dive Flow */
+        .dive-flow {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 24px 16px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .dive-layer {
+            flex: 1;
+            min-width: 140px;
+            max-width: 200px;
+            text-align: center;
+            padding: 16px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        .dive-layer.high { background: rgba(0,180,42,0.08); }
+        .dive-layer.mid { background: rgba(255,107,53,0.08); }
+        .dive-layer.low { background: rgba(139,92,246,0.08); }
+        
+        .dive-arrow {
+            width: 40px;
+            height: 32px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dive-arrow svg {
+            width: 20px;
+            height: 24px;
+        }
+        
+        .flow-line {
+            stroke-dashoffset: 0;
+            animation: flowDash 2s linear infinite;
+        }
+        
+        .flow-dot {
+            opacity: 0;
+        }
+        .flow-dot.dot1 {
+            animation: flowMove1 2s linear infinite;
+        }
+        .flow-dot.dot2 {
+            animation: flowMove2 2s linear infinite 0.4s;
+        }
+        .flow-dot.dot3 {
+            animation: flowMove3 2s linear infinite 0.8s;
+        }
+        
+        @keyframes flowDash {
+            to { stroke-dashoffset: -12; }
+        }
+        @keyframes flowMove1 {
+            0% { opacity: 0; cx: 4; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; cx: 24; }
+        }
+        @keyframes flowMove2 {
+            0% { opacity: 0; cx: 4; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; cx: 24; }
+        }
+        @keyframes flowMove3 {
+            0% { opacity: 0; cx: 4; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; cx: 24; }
+        }
+        
+        /* Platform Card */
+        .platform-card {
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            background: var(--bg-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .platform-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .platform-body {
+            margin-bottom: 12px;
+        }
+        .platform-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 14px;
+            color: #4E5969;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .platform-item:last-child { margin-bottom: 0; }
+        .platform-item-content {
+            flex: 1;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .platform-item strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .item-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            margin-top: 3px;
+            color: #C9CDD4;
+        }
+        .platform-tag {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            min-width: 100px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .platform-tag.tag-ulp {
+            background: rgba(168,85,247,0.1);
+            color: #a855f7;
+        }
+        .platform-tag.tag-vla {
+            background: rgba(255,107,53,0.1);
+            color: #ff6b35;
+        }
+        
+        .dive-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1D2129;
+        }
+        .dive-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        /* Partner Grid */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .partner-card {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .partner-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .partner-logo {
+            height: 48px;
+            width: 100%;
+            max-width: 120px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .partner-logo img {
+            height: 100%;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        .partner-logo svg {
+            height: 100%;
+            width: auto;
+            max-width: 100%;
+        }
+        .partner-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .partner-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.5;
+            flex-shrink: 0;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .partner-tag {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            background: rgba(242,243,245,0.3);
+            color: var(--text-muted);
+            display: inline-block;
+            flex-shrink: 0;
+            margin-bottom: 0;
+        }
+        .partner-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: auto;
+            padding-top: 12px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 600px) {
+            .partner-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* Evolution Section */
+        .evolution-section {
+            padding: 48px 0;
+            background: var(--bg-primary);
+        }
+        
+        .phase-flow-track {
+            position: relative;
+            height: 2px;
+            max-width: 800px;
+            margin: 0 auto 24px;
+            background: linear-gradient(90deg,
+                #00B42A 0%,
+                #00B42A 33%,
+                #FF6B35 33%,
+                #FF6B35 66%,
+                #8B5CF6 66%,
+                #8B5CF6 100%
+            );
+            border-radius: 1px;
+        }
+        .track-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #FF6B35;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            animation: trackMove 4s ease-in-out infinite;
+        }
+        @keyframes trackMove {
+            0% { left: 0; border-color: #00B42A; }
+            33% { left: 33%; border-color: #FF6B35; }
+            66% { left: 66%; border-color: #8B5CF6; }
+            100% { left: 100%; border-color: #8B5CF6; }
+        }
+        
+        .phase-card-header {
+            padding-bottom: 16px;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 16px;
+        }
+        .phase-card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .phase-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+        .meta-year {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .meta-divider {
+            color: var(--text-muted);
+        }
+        .meta-name {
+            color: var(--text-secondary);
+        }
+        .meta-status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: auto;
+            font-weight: 500;
+        }
+        .meta-status.done { background: rgba(0,180,42,0.15); color: #00B42A; }
+        .meta-status.active { background: rgba(255,107,53,0.15); color: #FF6B35; }
+        .meta-status.future { background: rgba(139,92,246,0.15); color: #8B5CF6; }
+        .meta-tag-vla {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            background: rgba(255,107,53,0.1);
+            color: #ff6b35;
+            font-weight: 500;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+        .meta-tag-ulp {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            background: rgba(168,85,247,0.1);
+            color: #a855f7;
+            font-weight: 500;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+        
+        .phase-flow-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: visible;
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+            min-height: 260px;
+            padding: 20px;
+        }
+        .phase-flow-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .phase-flow-card:nth-child(1).visible { transition-delay: 0s; }
+        .phase-flow-card:nth-child(2).visible { transition-delay: 0.2s; }
+        .phase-flow-card:nth-child(3).visible { transition-delay: 0.4s; }
+        .phase-flow-card:nth-child(4).visible { transition-delay: 0.6s; }
+        .phase-flow-card:nth-child(5).visible { transition-delay: 0.8s; }
+        
+        .phase-flow-card.base { border-top: 3px solid #00B42A; }
+        .phase-flow-card.model { border-top: 3px solid #FF6B35; }
+        .phase-flow-card.deploy { border-top: 3px solid #8B5CF6; }
+        .phase-flow-card.vision-2028 { 
+            border: 1px dashed rgba(139, 92, 246, 0.3); 
+            border-top: 3px dashed var(--accent-purple);
+            background: rgba(139, 92, 246, 0.05);
+        }
+        .phase-flow-card.vision-2029 { 
+            border: 1px dashed rgba(139, 92, 246, 0.3); 
+            border-top: 3px dashed var(--accent-purple);
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .phase-detail-row {
+                flex-direction: column !important;
+                gap: 24px !important;
+            }
+            .phase-flow-card {
+                min-height: auto;
+            }
+        }
+        
+        
+        
+        
+        .vision-section {
+            padding: 48px 0;
+            background: var(--bg-secondary);
+        }
+        .vision-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        .vision-card {
+            border: 1px solid #E5E6EB;
+            border-radius: 10px;
+            padding: 24px 20px;
+            text-align: center;
+            background: #fff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .vision-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .vision-card-num {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        .num-1 { color: rgba(0,180,42,0.25); }
+        .num-2 { color: rgba(255,107,53,0.25); }
+        .num-3 { color: rgba(139,92,246,0.25); }
+        .vision-card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1D2129;
+            margin-bottom: 10px;
+        }
+        .vision-card-desc {
+            font-size: 13px;
+            color: #4E5969;
+            line-height: 1.7;
+        }
+        @media (max-width: 768px) {
+            .vision-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin: 48px 0 24px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .section-sub {
+            font-size: 13px;
+            color: #4E5969;
+            margin-top: 6px;
+        }
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: #E5E6EB;
+            margin: 12px auto 0;
+        }
+        
+        /* Phase Detail Cards */
+        .phase-detail-row {
+            display: flex;
+            gap: 16px;
+            align-items: stretch;
+        }
+        .phase-detail-row > div {
+            flex: 1;
+        }
+        .phase-title {
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.4;
+            min-height: 24px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+        .phase-sub {
+            font-size: 12px;
+            color: #86909C;
+            line-height: 1.5;
+            min-height: 36px;
+            margin-bottom: 16px;
+        }
+        .phase-detail-card {
+            border-radius: 10px;
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .phase-detail-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .phase-detail-card.base { background: #F6FFED; border-top: 3px solid #00B42A; }
+        .phase-detail-card.model { background: #FFF7E6; border-top: 3px solid #FF6B35; }
+        .phase-detail-card.deploy { background: #F9F0FF; border-top: 3px solid #8B5CF6; }
+        
+        .phase-detail-header {
+            margin-bottom: 16px;
+        }
+        .phase-badge {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .phase-detail-card.base .phase-badge { background: rgba(217,247,190,0.8); color: #00B42A; }
+        .phase-detail-card.model .phase-badge { background: rgba(255,231,186,0.8); color: #FF6B35; }
+        .phase-detail-card.deploy .phase-badge { background: rgba(239,219,255,0.8); color: #8B5CF6; }
+        
+        .phase-detail-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .phase-detail-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        .phase-detail-body {
+            flex-grow: 1;
+            margin-bottom: 16px;
+        }
+        .detail-item {
+            display: flex;
+            gap: 10px;
+            font-size: 13px;
+            color: #4E5969;
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+        .detail-item:last-child { margin-bottom: 0; }
+        .detail-bullet {
+            font-size: 13px;
+            color: #86909C;
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .detail-item strong {
+            color: #1D2129;
+            font-weight: 500;
+        }
+        .detail-sub {
+            font-size: 12px;
+            color: #86909C;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .phase-value-line {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 6px;
+            line-height: 1.5;
+            border: 1px solid var(--border-light);
+            margin-top: auto;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .phase-detail-row { flex-direction: column; }
+            .phase-flow-card { min-height: auto; }
+            .dive-flow { flex-direction: column; }
+            .dive-layer { max-width: 100%; }
+            .dive-arrow { transform: rotate(90deg); }
+        }
+        
+        .tech-base-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(250,251,252,0.3);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .base-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .base-item {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .base-divider {
+            color: var(--border-medium);
+        }
+        
+        @media (max-width: 768px) {
+            .phase-row { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-xl border-b transition-all duration-300" style="background: var(--nav-bg); border-color: var(--nav-border);">
+        <div class="max-w-7xl mx-auto h-full px-4 lg:px-8 flex items-center justify-between">
+            <a href="index.html"><img src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="index.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="mam">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="nav-link active active-nav font-medium" data-page="ocean">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="agibox">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="scenarios">落地场景</a>
+                <a href="about.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="about">关于我们</a>
+                <a href="contact.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="contact">联系我们</a>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle-btn" class="flex items-center justify-center w-10 h-10 rounded-lg transition-colors" style="background: var(--bg-card); border-color: var(--border-light); border: 1px solid;">
+                    <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2" style="color: var(--text-primary);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden border-t hidden transition-all duration-300" style="background: var(--bg-primary); border-color: var(--nav-border);">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="block font-medium text-[var(--accent-purple)]">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">落地场景</a>
+                <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">关于我们</a>
+                <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">联系我们</a>
+                <button id="mobile-theme-toggle" class="w-full flex items-center justify-center gap-2 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                    <svg id="mobile-theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-[100px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-[36px] md:text-[48px] font-black" style="color: var(--text-primary);">深渊矩阵 · 海洋具身智能</h1>
+            <p class="page-sub text-[18px] mt-4" style="color: var(--text-secondary);">MaM-GPT 海洋物理世界模型，从看见、理解到值守</p>
+        </div>
+    </section>
+
+    <section class="py-[60px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-4xl mx-auto">
+            <div class="rounded-2xl p-8 md:p-12" style="background: var(--bg-card); border: 1px solid var(--border-light);">
+                <div class="text-center mb-12">
+                    <p class="text-[20px] md:text-[28px] font-bold" style="color: var(--text-primary);">海洋是维度最丰富、物理耦合关系最复杂的实景场景</p>
+                    <p class="text-[16px] md:text-[20px] mt-3 font-bold" style="color: var(--accent-purple);">是训练通用世界模型的天然考场</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16">
+                    <div class="w-full md:w-[42%] text-center">
+                        <div class="w-20 h-20 mx-auto mb-5 rounded-2xl flex items-center justify-center" style="background: rgba(0,212,255,0.08);">
+                            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                                <circle cx="25" cy="25" r="22" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,3"/>
+                                <path d="M25 6 L25 16 M25 34 L25 44 M6 25 L16 25 M34 25 L44 25" stroke="#00d4ff" stroke-width="2"/>
+                                <circle cx="25" cy="25" r="5" fill="#00d4ff"/>
+                                <circle cx="9" cy="25" r="3" fill="#00d4ff" opacity="0.6"/>
+                                <circle cx="41" cy="25" r="3" fill="#00d4ff" opacity="0.6"/>
+                                <circle cx="25" cy="9" r="3" fill="#00d4ff" opacity="0.6"/>
+                                <circle cx="25" cy="41" r="3" fill="#00d4ff" opacity="0.6"/>
+                                <circle cx="15" cy="15" r="2" fill="#00d4ff" opacity="0.4"/>
+                                <circle cx="35" cy="15" r="2" fill="#00d4ff" opacity="0.4"/>
+                                <circle cx="15" cy="35" r="2" fill="#00d4ff" opacity="0.4"/>
+                                <circle cx="35" cy="35" r="2" fill="#00d4ff" opacity="0.4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-[18px] font-bold mb-3" style="color: var(--accent-cyan);">高维信号空间</h3>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">海图、水文、声呐、气象、电磁等十余类异构数据</p>
+                    </div>
+                    
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(168,85,247,0.1);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(168,85,247,0.1);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full md:w-[42%] text-center">
+                        <div class="w-20 h-20 mx-auto mb-5 rounded-2xl flex items-center justify-center" style="background: rgba(168,85,247,0.08);">
+                            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                                <path d="M25 8 L36 20 L36 38 L25 50 L14 38 L14 20 Z" stroke="#a855f7" stroke-width="2"/>
+                                <path d="M25 25 L36 25 M25 25 L25 38 M25 25 L14 25" stroke="#a855f7" stroke-width="1.5"/>
+                                <circle cx="25" cy="8" r="4" fill="#a855f7"/>
+                                <circle cx="40" cy="20" r="4" fill="#a855f7"/>
+                                <circle cx="25" cy="42" r="4" fill="#a855f7"/>
+                                <circle cx="10" cy="20" r="4" fill="#a855f7"/>
+                                <path d="M40 20 L46 17 M40 20 L46 23" stroke="#a855f7" stroke-width="1.5"/>
+                                <path d="M25 42 L22 48 M25 42 L28 48" stroke="#a855f7" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-[18px] font-bold mb-3" style="color: var(--accent-cyan);">产业化验证空间</h3>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">海洋航运、渔业、海事智能化全链条市场</p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-10">
+                    <span class="inline-block px-6 py-2.5 rounded-full text-[13px] font-semibold" style="background: rgba(168,85,247,0.12); color: var(--accent-purple);">战略起源场景</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[40px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-3xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">技术联动逻辑</h2>
+                <p class="section-sub">海洋作为最高维物理场景，习得通用规律向低维俯冲</p>
+                <p class="text-[14px] mt-2" style="color: var(--text-muted);">海洋是维度最丰富、物理耦合关系最复杂的实景场景，在海洋完成ULP底座训练后，可向工业、能源、商业等低维场景低成本泛化</p>
+                <div class="section-divider"></div>
+            </div>
+            <div class="ocean-section rounded-xl p-8 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                <p class="text-[16px] leading-relaxed" style="color: var(--text-secondary);">
+                    海洋是维度最丰富、物理耦合关系最复杂的实景场景，海量岸基、水面、水下实景数据是训练通用世界模型的核心数据集；模型在海洋场景习得统一物理因果规律后，可平滑适配工业、能源、商业等全部实体行业，解决单场景模型泛化能力不足的行业痛点。
+                </p>
+                <div class="dive-flow">
+                    <div class="dive-layer high">
+                        <div class="dive-label">海洋高维训练场</div>
+                        <div class="dive-desc">岸基 · 水面 · 水下</div>
+                    </div>
+                    <div class="dive-arrow arrow-1">
+                        <svg viewBox="0 0 20 16" fill="none">
+                            <defs>
+                                <linearGradient id="arrowGrad1" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#00B42A"/>
+                                    <stop offset="100%" stop-color="#FF6B35"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M0 8h14M10 3l5 5-5 5" stroke="url(#arrowGrad1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="dive-layer mid">
+                        <div class="dive-label">习得通用物理规律</div>
+                        <div class="dive-desc">统一隐空间预测</div>
+                    </div>
+                    <div class="dive-arrow arrow-2">
+                        <svg viewBox="0 0 20 16" fill="none">
+                            <defs>
+                                <linearGradient id="arrowGrad2" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#FF6B35"/>
+                                    <stop offset="100%" stop-color="#8B5CF6"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M0 8h14M10 3l5 5-5 5" stroke="url(#arrowGrad2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="dive-layer low">
+                        <div class="dive-label">全行业低维场景俯冲</div>
+                        <div class="dive-desc">工业 · 能源 · 商业</div>
+                    </div>
+                </div>
+                <p class="text-[14px] mt-6 text-center italic" style="color: var(--text-muted);">高维场景淬炼的底座，才能轻松适配低维场景</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[40px] px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-3xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">产学研战略合作资源</h2>
+                <p class="section-sub">学术数据、国家级底座、大模型联合</p>
+                <div class="section-divider"></div>
+            </div>
+            <div class="ocean-section rounded-xl p-8 border" style="background: var(--bg-card); border-color: var(--border-light);">
+                <p class="text-[16px] leading-relaxed" style="color: var(--text-secondary);">
+                    与浙江大学海洋感知全国重点实验室、交通部上海海图中心达成长期战略合作，联合OceanGPT共建海洋物理世界体系，开展多维度海洋智能原型验证。
+                </p>
+                <div class="partner-grid">
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <img src="images/logo-zju.png" alt="浙江大学">
+                        </div>
+                        <div class="partner-name">浙江大学</div>
+                        <div class="partner-role">海洋感知全国重点实验室 · 学术数据伙伴</div>
+                        <div class="partner-tag">学术数据伙伴</div>
+                        <div class="partner-desc">浙大舟山海洋中心为科研转化出口，联动知识图谱实验室、海洋学院形成全栈支撑</div>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <img src="images/logo-haitu.png" alt="交通部上海海图中心">
+                        </div>
+                        <div class="partner-name">交通部上海海图中心</div>
+                        <div class="partner-role">国家级数据底座 · 战略合作伙伴</div>
+                        <div class="partner-tag">战略合作伙伴</div>
+                        <div class="partner-desc">共享标准化海洋地理、航道水文公开数据集</div>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <img id="oceangpt-logo" src="images/logo-oceangpt.png" alt="OceanGPT">
+                        </div>
+                        <div class="partner-name">OceanGPT</div>
+                        <div class="partner-role">海洋大模型联合</div>
+                        <div class="partner-tag">大模型联合</div>
+                        <div class="partner-desc">联合构建海洋多模态大模型认知体系</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="evolution-section px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">深渊矩阵 · 双线发展路径</h2>
+                <p class="section-sub">海洋物理世界模型落地全周期 · MaM-GPT 实景进化能力验证</p>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="phase-flow-track">
+                <div class="track-dot"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="rounded-xl p-6 border-2" style="background: rgba(0,212,255,0.03); border-color: rgba(0,212,255,0.2);">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <span class="text-[24px] font-bold" style="color: #00d4ff;">2025</span>
+                            <span class="text-[14px] ml-2" style="color: var(--text-secondary);">数据底座成型</span>
+                        </div>
+                        <span class="text-[12px] px-3 py-1 rounded-full" style="background: rgba(0,212,255,0.15); color: #00d4ff;">已完成</span>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• MaM-GPT完成海洋场景训练，实现海图识别、检索、解析</p>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• 完成多源异构海洋数据底座建设</p>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• 发布AI海图智能体，实现自然语言交互式海图查询与航行通告自动处理</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t" style="border-color: rgba(0,212,255,0.1);">
+                        <span class="text-[12px]" style="color: rgba(0,212,255,0.7);">模型归属：MaM-GPT商用体系</span>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl p-6 border-2" style="background: rgba(255,107,53,0.03); border-color: rgba(255,107,53,0.2);">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <span class="text-[24px] font-bold" style="color: #ff6b35;">2026</span>
+                            <span class="text-[14px] ml-2" style="color: var(--text-secondary);">智能体试点商用</span>
+                        </div>
+                        <span class="text-[12px] px-3 py-1 rounded-full" style="background: rgba(255,107,53,0.15); color: #ff6b35;">进行中</span>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• MaM-GPT预览版搭配VT-Claw实现自主海图绘制、航线规划</p>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• 小规模商用试点</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t" style="border-color: rgba(255,107,53,0.1);">
+                        <span class="text-[12px]" style="color: rgba(255,107,53,0.7);">模型归属：MaM-GPT商用体系</span>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl p-6 border-2" style="background: rgba(168,85,247,0.03); border-color: rgba(168,85,247,0.2);">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <span class="text-[24px] font-bold" style="color: #a855f7;">2027</span>
+                            <span class="text-[14px] ml-2" style="color: var(--text-secondary);">规模化部署</span>
+                        </div>
+                        <span class="text-[12px] px-3 py-1 rounded-full" style="background: rgba(168,85,247,0.15); color: #a855f7;">规划中</span>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• ULP归一化架构定型</p>
+                        <p class="text-[14px]" style="color: var(--text-secondary);">• 全海洋场景规模化部署</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t" style="border-color: rgba(168,85,247,0.1);">
+                        <span class="text-[12px]" style="color: rgba(168,85,247,0.7);">模型归属：ULP下一代架构</span>
+                    </div>
+                </div>
+            </div>
+                
+                <div class="tech-base-bar">
+                    <span class="base-label">技术底座</span>
+                    <span class="base-item">云锦微边缘世界模型</span>
+                    <span class="base-divider">·</span>
+                    <span class="base-item">浙江大学 OceanGPT</span>
+                    <span class="base-divider">·</span>
+                    <span class="base-item">交通部海图中心</span>
+                </div>
+                
+                <div class="text-center mt-8">
+                    <a href="investor-mamgpt.html" class="abyss-btn inline-flex items-center gap-2 px-8 py-3 rounded-lg font-medium group" style="background: var(--accent-cyan); color: white;">
+                        查看 MaM-GPT 通用世界模型完整技术架构
+                        <svg class="abyss-btn-arrow w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-[60px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-[28px] md:text-[32px] font-bold" style="color: var(--text-primary);">MaM-GPT海洋能力演进：从理解到创造</h2>
+                <p class="text-[14px] mt-3" style="color: var(--text-secondary);">基于MaM-GPT商用体系实机演示</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="rounded-xl overflow-hidden border-2" style="border-color: rgba(0,212,255,0.3);">
+                    <div class="relative aspect-video" style="background: var(--bg-card);">
+                        <video id="ocean-query-video" 
+                               class="absolute inset-0 w-full h-full object-cover"
+                               poster="videos/mamgpt-ocean-query.jpg"
+                               playsinline
+                               webkit-playsinline
+                               controls
+                               preload="metadata">
+                            <source src="videos/mamgpt-ocean-query.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-[12px] font-medium z-10" style="background: rgba(0,212,255,0.2); color: #00d4ff;">2025能力</div>
+                    </div>
+                    <div class="p-5" style="background: var(--bg-card);">
+                        <h3 class="text-[16px] font-bold" style="color: #00d4ff;">看懂海洋：智能海图查询</h3>
+                        <p class="text-[13px] mt-2" style="color: var(--text-secondary);">演示MaM-GPT对海图、水文、气象等数据的理解能力，自然语言交互式查询与航行通告自动处理。</p>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden border-2" style="border-color: rgba(255,107,53,0.3);">
+                    <div class="relative aspect-video" style="background: var(--bg-card);">
+                        <video id="ocean-draw-video" 
+                               class="absolute inset-0 w-full h-full object-cover"
+                               poster="videos/mamgpt-ocean-draw.jpg"
+                               playsinline
+                               webkit-playsinline
+                               controls
+                               preload="metadata">
+                            <source src="videos/mamgpt-ocean-draw.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-[12px] font-medium z-10" style="background: rgba(255,107,53,0.2); color: #ff6b35;">2026升级</div>
+                    </div>
+                    <div class="p-5" style="background: var(--bg-card);">
+                        <h3 class="text-[16px] font-bold" style="color: #ff6b35;">绘制海洋：AI自主海图生成</h3>
+                        <p class="text-[13px] mt-2" style="color: var(--text-secondary);">演示MaM-GPT预览版新增能力——不仅理解海图，更能自主绘制海图、规划智能航线，从"看懂"到"创造"的升级。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <p class="text-[12px]" style="color: var(--text-muted);">基于MaM-GPT商用体系实机演示 · 30-60秒实机演示</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="vision-section px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">长期产业愿景</h2>
+                <p class="section-sub">岸-水面-水下一体化具身智能体系</p>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="vision-grid">
+                <div class="vision-card">
+                    <div class="vision-card-num num-1">01</div>
+                    <div class="vision-card-title">海洋本体体系完善</div>
+                    <div class="vision-card-desc">补齐多海域、极端场景的物理感知与环境调控能力，夯实世界模型训练底座。</div>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-card-num num-2">02</div>
+                    <div class="vision-card-title">通用AI能力跨域迁移</div>
+                    <div class="vision-card-desc">依托MaM-GPT世界模型底层物理推演能力，将海洋场景验证成熟的技术方案，平移至工业、能源、商业等实体行业。</div>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-card-num num-3">03</div>
+                    <div class="vision-card-title">行业基础设施生态落地</div>
+                    <div class="vision-card-desc">面向B端输出标准化AGI边端部署节点，构建7×24小时运行的海洋物理AI基础设施与开放生态。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-[60px] px-4" style="background: var(--bg-primary);">
+        <div class="max-w-3xl mx-auto text-center">
+            <p class="text-[14px] mb-6 italic" style="color: rgba(0,212,255,0.6);">从海洋高维实景场景起步，向全品类物理场景拓展落地</p>
+            <a href="customer-agibox.html" class="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-medium transition-all hover:brightness-110 group" style="background: var(--accent-cyan); color: white;">
+                查看AGI Box硬件载体 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <footer id="footer" class="py-12 px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <img id="footer-logo" src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto mb-4">
+                    <p class="text-sm" style="color: var(--text-muted);">让AI落地物理世界</p>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4" style="color: var(--text-primary);">快速链接</h4>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">首页</a>
+                        <a href="investor-mamgpt.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">MaM-GPT 世界模型</a>
+                        <a href="investor-abyss.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">深渊矩阵</a>
+                        <a href="customer-agibox.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">AGI Box</a>
+                    </div>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">© 2026 云锦微VIITRIX</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isLightTheme = false;
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            const body = document.body;
+            const navLogo = document.querySelector('nav img');
+            const footerLogo = document.getElementById('footer-logo');
+            const oceanGptLogo = document.getElementById('oceangpt-logo');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const mobileThemeIconDark = document.getElementById('mobile-theme-icon-dark');
+            const mobileThemeIconLight = document.getElementById('mobile-theme-icon-light');
+            if (isLightTheme) {
+                body.classList.add('light-theme');
+                if (navLogo) navLogo.src = 'images/logo-white.png';
+                if (footerLogo) footerLogo.src = 'images/logo-white.png';
+                if (oceanGptLogo) oceanGptLogo.src = 'images/logo-oceangpt.png';
+                if (themeIconDark) themeIconDark.classList.add('hidden');
+                if (themeIconLight) themeIconLight.classList.remove('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.add('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.remove('hidden');
+            } else {
+                body.classList.remove('light-theme');
+                if (navLogo) navLogo.src = 'images/logo.png';
+                if (footerLogo) footerLogo.src = 'images/logo.png';
+                if (oceanGptLogo) oceanGptLogo.src = 'images/logo-oceangpt-dark.png';
+                if (themeIconDark) themeIconDark.classList.remove('hidden');
+                if (themeIconLight) themeIconLight.classList.add('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.remove('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.add('hidden');
+            }
+            localStorage.setItem('viitrix-theme', isLightTheme ? 'light' : 'dark');
+        }
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
+        const savedTheme = localStorage.getItem('viitrix-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        const parallaxElements = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.1;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }, { passive: true });
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('visible');
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.phase-flow-card').forEach(card => observer.observe(card));
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿云锦微官网 · 总经理核验包（2026-11-13）
+
+【这是什么】
+7.0 首页的可上线副本。整份拖进 GitHub 仓库根目录，开 GitHub Pages 即可访问。
+源目录 7.0 一个字节没动；完整备份在 ..\7.0.backup-20261113（639.8 MB / 114 files）。
+
+【目录】
+  index.html        首页（HTML 未改，只补齐了 4 个岗位视频文件）
+  about / contact / scenarios / customer-agibox / investor-abyss / investor-mamgpt / yinian / zn-claw .html   另外 8 页
+  css/  js/  public/  images/（78 张）  videos/（15 个）
+
+【视频 15 个 - 首页必需 11 个】
+  五步演示 01-say 0.2 / 02-ask 0.7 / 03-pick 0.5 / 04-build 0.5 / 05-run 0.8  MB
+  长片 film-52s 7.1 MB
+  五岗位 proof-1 9.0 / proof-2 6.4 / proof-3 5.7 / proof-4 4.1 / proof-5 1.6  MB（2026-11-12 新做的 4 条）
+  内页首屏 banner-dark 4.5 / banner-white 4.5 / banner-dark1 6.8 / banner-white1 6.5  MB
+
+【为核验完整度补进来的 21 张图】
+  7.0\images 原本缺 19 张、videos 缺 2 张海报图（关于我们团队照、AGI Box 产品图、深渊矩阵 OceanGPT logo、zn-claw 场景对比图、一念场景图、微信二维码底图等）。
+  已从同级 viitrix-kimi-5.0 / 6.0 的 images、videos 目录按同名补入 publish。7.0 源目录未改。
+  效果：9 个页面 img 破图 0（yinian、zn-claw 各剩 1 个 src 为空的占位，非缺文件）。
+
+【仍未带的 4 条视频（体积原因）】
+  tvc-brand1.mp4    278.6 MB  — 超 GitHub 单文件 100 MB 上限
+  tvc-solution1.mp4 109.7 MB  — 同上
+  mamgpt-ocean-draw.mp4 46.8 / mamgpt-ocean-query.mp4 60.2 MB  — 仅「深渊矩阵」页用，为把整包压在 90 MB 内暂不带
+  影响：关于我们、AGI Box 各 1~2 处视频位空白；深渊矩阵页 2 处空白。静态内容与其他图都不受影响。
+
+【上线（GitHub Pages，纯网页操作）】
+  1. github.com → New repository → 名 viitrix-site → Public → Create
+  2. Add file → Upload files → 把本目录全部内容（含子文件夹）拖进去 → Commit changes
+     单次上传上限 100 个文件；本包 100+ 个，建议分两批：先 images/，再其余
+  3. Settings → Pages → Source: Deploy from a branch → main / (root) → Save
+  4. 等 1~2 分钟 → https://<用户名>.github.io/viitrix-site/
+
+【只想给总经理一个人看】
+  同一份拖到 Cloudflare Pages，再在 Zero Trust → Access 加一条策略（只允许指定邮箱收验证码），免费额度够。
+
+【核验清单】
+  1 首屏 banner 轮播在动  2 右上角主题切换（刷新后记得）  3 五步演示自动播、播完自动切段
+  4 五岗位 5 个「观看演示视频」都能播（proof-1/2/3/4/5）  5 导航 8 页都能进  6 手机打开不乱
+
+【已知未处理】
+  首页字号 14 种（既有问题，check_design 唯一余项）；本包不含 index-unslop 版（该版 .bill-cap 对比度 4.42:1 不达 AA）。

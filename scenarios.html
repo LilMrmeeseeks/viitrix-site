@@ -1,0 +1,1171 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>落地场景 - 云锦微VIITRIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #05080f;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00d4ff;
+            --accent-blue: #0088CC;
+            --accent-purple: #8B5CF6;
+            --accent-green: #00B42A;
+            --border-light: rgba(255,255,255,0.05);
+            --border-medium: rgba(255,255,255,0.1);
+            --nav-bg: rgba(10,14,23,0.85);
+            --nav-border: rgba(255,255,255,0.05);
+        }
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #f8f9fa;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #0088cc;
+            --accent-blue: #0088CC;
+            --accent-purple: #8B5CF6;
+            --accent-green: #00B42A;
+            --border-light: rgba(0,0,0,0.06);
+            --border-medium: rgba(0,0,0,0.1);
+            --nav-bg: rgba(255,255,255,0.9);
+            --nav-border: rgba(0,0,0,0.06);
+        }
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .active-nav {
+            color: var(--accent-orange) !important;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link[data-page="mam"]::after { background: var(--accent-purple); }
+        .nav-link[data-page="ocean"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="agibox"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="scenarios"]::after { background: var(--accent-orange); }
+        .nav-link[data-page="about"]::after { background: var(--accent-cyan); }
+        .nav-link[data-page="contact"]::after { background: var(--text-primary); }
+
+        /* Scenario Hero */
+        .scenario-hero {
+            padding: 120px 16px 60px;
+            max-width: 768px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .scenario-hero h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        @media (min-width: 768px) {
+            .scenario-hero h1 {
+                font-size: 48px;
+            }
+        }
+        .scenario-hero .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+        .section-divider {
+            width: 40px;
+            height: 2px;
+            background: var(--accent-orange);
+            margin: 24px auto;
+            border-radius: 1px;
+        }
+        .scenario-hero .lead {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-top: 0;
+        }
+
+        /* Scenario Grid */
+        .scenario-grid {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px 16px 60px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .scenario-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+        }
+        .scene-card {
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .scene-card:hover {
+            transform: translateY(-4px);
+        }
+        .scene-card.active {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 24px rgba(0, 136, 204, 0.12);
+        }
+        .scene-card[data-scene="commercial"].active { border-color: var(--accent-orange); box-shadow: 0 0 24px rgba(255, 107, 53, 0.12); }
+        .scene-card[data-scene="cultural"].active { border-color: var(--accent-purple); box-shadow: 0 0 24px rgba(139, 92, 246, 0.12); }
+        .scene-card[data-scene="marine"].active { border-color: var(--accent-green); box-shadow: 0 0 24px rgba(0, 180, 42, 0.12); }
+
+        .scene-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+        }
+        .scene-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .scene-card:hover .scene-thumb img {
+            transform: scale(1.05);
+        }
+        .thumb-industrial { background: linear-gradient(135deg, #0088CC 0%, #E8F4FD 100%); }
+        .thumb-commercial { background: linear-gradient(135deg, #FF6B35 0%, #FFF2EB 100%); }
+        .thumb-cultural { background: linear-gradient(135deg, #8B5CF6 0%, #F3EEFC 100%); }
+        .thumb-marine { background: linear-gradient(135deg, #00B42A 0%, #F6FFED 100%); }
+
+        .scene-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding: 20px 20px 8px;
+            margin: 0;
+        }
+        .scene-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            z-index: 2;
+        }
+        .tag-migration {
+            background: rgba(0, 136, 204, 0.9);
+            color: white;
+        }
+        .tag-origin {
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+        }
+        .scene-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            padding: 0 20px 6px;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .scene-card[data-scene="commercial"] .scene-value { color: var(--accent-orange); }
+        .scene-card[data-scene="cultural"] .scene-value { color: var(--accent-purple); }
+        .scene-card[data-scene="marine"] .scene-value { color: var(--accent-green); }
+        .scene-functions {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 0 20px 20px;
+            margin: 0;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Scenario Detail Panel */
+        .scenario-detail-panel {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 16px 80px;
+        }
+        .detail-container {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            min-height: 420px;
+            overflow: hidden;
+        }
+        .detail-view {
+            display: none;
+            animation: detailFadeIn 0.3s ease;
+            scroll-margin-top: 80px;
+        }
+        .detail-view.active {
+            display: block;
+        }
+        @keyframes detailFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .detail-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 24px;
+        }
+        @media (min-width: 768px) {
+            .detail-layout {
+                flex-direction: row;
+                gap: 32px;
+                padding: 32px;
+            }
+        }
+        .detail-visual {
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+            .detail-visual {
+                width: 45%;
+            }
+        }
+        .detail-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .detail-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .detail-content {
+            flex: 1;
+        }
+        @media (min-width: 768px) {
+            .detail-content {
+                width: 55%;
+            }
+        }
+
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .tag-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tag-blue { background: rgba(0, 136, 204, 0.15); color: var(--accent-blue); }
+        .tag-orange { background: rgba(255, 107, 53, 0.15); color: var(--accent-orange); }
+        .tag-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .tag-green { background: rgba(0, 180, 42, 0.15); color: var(--accent-green); }
+
+        .detail-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 8px;
+        }
+        .detail-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin: 0 0 12px;
+        }
+        .tech-backing {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0 0 20px;
+            padding: 10px 14px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .info-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .info-row-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .info-row-bottom {
+            width: 100%;
+        }
+        .info-row-bottom .info-card {
+            padding: 18px;
+        }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid #F2F3F5;
+            border-radius: 8px;
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+        }
+
+        .detail-industrial .info-card::before { background: #0088CC; }
+        .detail-commercial .info-card::before { background: #FF6B35; }
+        .detail-cultural .info-card::before { background: #8B5CF6; }
+        .detail-marine .info-card::before { background: #00B42A; }
+
+        .info-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1D2129;
+            margin-bottom: 10px;
+            padding-left: 8px;
+        }
+        .info-card p {
+            font-size: 12px;
+            color: #86909C;
+            line-height: 1.8;
+            padding-left: 8px;
+        }
+
+        .detail-products {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .product-tag {
+            font-size: 12px;
+            padding: 4px 12px;
+            background: #F2F3F5;
+            color: #4E5969;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .detail-industrial .product-tag:hover { background: #0088CC; color: #fff; }
+        .detail-commercial .product-tag:hover { background: #FF6B35; color: #fff; }
+        .detail-cultural .product-tag:hover { background: #8B5CF6; color: #fff; }
+        .detail-marine .product-tag:hover { background: #00B42A; color: #fff; }
+
+        .product-tag::after {
+            content: '→';
+            font-size: 10px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .product-tag:hover::after { opacity: 1; }
+
+        .detail-btn {
+            align-self: flex-start;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 4px;
+        }
+        .detail-btn:hover {
+            transform: translateX(2px);
+            filter: brightness(0.9);
+        }
+        .btn-blue { background: #0088CC; }
+        .btn-blue:hover { background: #006699; }
+
+        .promise-bar {
+            background: var(--bg-secondary);
+            padding: 16px 16px;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .promise-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .promise-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .promise-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(0, 180, 42, 0.1);
+            color: #00B42A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .promise-divider {
+            color: var(--border-medium);
+            font-size: 12px;
+        }
+
+        .evidence-line {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 12px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+        .evidence-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 14px;
+            background: var(--accent-blue);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .info-row-top {
+                grid-template-columns: 1fr;
+            }
+            .capability-brief { display: none; }
+            .detail-btn {
+                width: 100%;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+            .scene-value {
+                white-space: normal;
+                overflow: visible;
+                text-overflow: unset;
+            }
+            .scene-functions {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .capability-brief {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #F5F6F7;
+        }
+        .cap-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+        }
+        .cap-item svg {
+            width: 24px;
+            height: 24px;
+        }
+        .detail-industrial .cap-item svg { color: rgba(0,136,204,0.7); }
+        .detail-commercial .cap-item svg { color: rgba(255,107,53,0.7); }
+        .detail-cultural .cap-item svg { color: rgba(139,92,246,0.7); }
+        .detail-marine .cap-item svg { color: rgba(0,180,42,0.7); }
+
+        .cap-item span {
+            font-size: 11px;
+            color: #86909C;
+            line-height: 1.2;
+        }
+
+        .compliance-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+        .marine-more-link {
+            font-size: 13px;
+            color: var(--accent-cyan);
+            margin-top: 16px;
+            display: inline-block;
+        }
+        .marine-more-link:hover {
+            text-decoration: underline;
+        }
+
+        .value-list {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 2;
+        }
+        .value-list li {
+            margin-bottom: 4px;
+        }
+        .solution-list {
+            margin: 0;
+            padding-left: 24px;
+        }
+        .solution-list li {
+            margin-bottom: 10px;
+            font-size: 0;
+        }
+        .solution-title {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        .solution-desc {
+            display: block;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 2px;
+        }
+
+        .closing-band {
+            background: #F7F9FC;
+            padding: 64px 20px;
+            text-align: center;
+        }
+        .closing-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .closing-main {
+            font-size: 18px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0 0 16px;
+        }
+        .closing-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0 0 24px;
+        }
+        .closing-btn {
+            padding: 12px 32px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .value-list, .solution-list {
+                padding-left: 16px;
+                font-size: 13px;
+            }
+            .closing-main {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+            .closing-btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 h-16 backdrop-blur-xl border-b transition-all duration-300" style="background: var(--nav-bg); border-color: var(--nav-border);">
+        <div class="max-w-7xl mx-auto h-full px-4 lg:px-8 flex items-center justify-between">
+            <a href="index.html"><img src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="index.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="mam">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="ocean">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="agibox">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="nav-link active active-nav font-medium" data-page="scenarios">落地场景</a>
+                <a href="about.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="about">关于我们</a>
+                <a href="contact.html" class="nav-link text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" data-page="contact">联系我们</a>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle-btn" class="flex items-center justify-center w-10 h-10 rounded-lg transition-colors" style="background: var(--bg-card); border-color: var(--border-light); border: 1px solid;">
+                    <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--text-secondary);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2" style="color: var(--text-primary);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden border-t hidden transition-all duration-300" style="background: var(--bg-primary); border-color: var(--nav-border);">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">首页</a>
+                <a href="investor-mamgpt.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">MaM-GPT 世界模型</a>
+                <a href="investor-abyss.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">深渊矩阵·海洋具身智能</a>
+                <a href="customer-agibox.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AGI Box 物理AI边缘大脑</a>
+                <a href="scenarios.html" class="block font-medium text-[var(--accent-orange)]">落地场景</a>
+                <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">关于我们</a>
+                <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">联系我们</a>
+                <button id="mobile-theme-toggle" class="w-full flex items-center justify-center gap-2 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                    <svg id="mobile-theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 导语区 -->
+    <section class="scenario-hero">
+        <h1>落地场景</h1>
+        <p class="subtitle">全行业无人值守解决方案</p>
+        <div class="section-divider"></div>
+        <p class="lead">
+            面向工业能源、商业园区、文旅文博、海洋海事等场景，提供软硬一体无人值守物理AI解决方案，依托AGI Box物理AI边缘大脑与MaM-GPT世界模型，实现可落地、可私有化部署的全域智能感知体系。以下每个场景均有成熟商用方案支撑，可私有化部署、断网自治。
+        </p>
+    </section>
+
+    <!-- 承诺条 -->
+    <section class="promise-bar">
+        <div class="promise-content">
+            <span class="promise-item">
+                <span class="promise-icon">✓</span>
+                <span>断网也能跑</span>
+            </span>
+            <span class="promise-divider">|</span>
+            <span class="promise-item">
+                <span class="promise-icon">✓</span>
+                <span>数据不出域</span>
+            </span>
+            <span class="promise-divider">|</span>
+            <span class="promise-item">
+                <span class="promise-icon">✓</span>
+                <span>7×24小时不休眠</span>
+            </span>
+        </div>
+    </section>
+
+    <!-- 2×2 场景卡片网格 -->
+    <section class="scenario-grid">
+        <div class="scene-card active" data-scene="industrial" onclick="switchScenario('industrial')">
+            <span class="scene-tag tag-migration">迁移应用场景</span>
+            <div class="scene-thumb thumb-industrial">
+                <img src="images/scene/scene-detail-industrial.jpg" alt="" onerror="this.style.display='none'">
+            </div>
+            <h3>工业能源 · 无人值守</h3>
+            <p class="scene-value">异常秒级主动预警，降低人工巡检成本与安全风险</p>
+            <p class="scene-functions">变电站监测 · 油气管道巡检 · 车间安全合规</p>
+        </div>
+
+        <div class="scene-card" data-scene="commercial" onclick="switchScenario('commercial')">
+            <span class="scene-tag tag-migration">迁移应用场景</span>
+            <div class="scene-thumb thumb-commercial">
+                <img src="images/scene/scene-detail-commercial.jpg" alt="" onerror="this.style.display='none'">
+            </div>
+            <h3>连锁门店 · AI店长</h3>
+            <p class="scene-value">客流、安防、巡店一屏统管，门店无人也能正常营业</p>
+            <p class="scene-functions">客流分析 · 仓储管控 · 园区安防巡逻</p>
+        </div>
+
+        <div class="scene-card" data-scene="cultural" onclick="switchScenario('cultural')">
+            <span class="scene-tag tag-migration">迁移应用场景</span>
+            <div class="scene-thumb thumb-cultural">
+                <img src="images/scene/scene-detail-cultural.jpg" alt="" onerror="this.style.display='none'">
+            </div>
+            <h3>文旅文博 · 陪伴智能体</h3>
+            <p class="scene-value">会讲解、能互动的文化IP智能体，让场馆活起来</p>
+            <p class="scene-functions">智能导览 · 沉浸讲解 · 互动体验</p>
+        </div>
+
+        <div class="scene-card" data-scene="marine" onclick="switchScenario('marine')">
+            <span class="scene-tag tag-origin">战略起源场景</span>
+            <div class="scene-thumb thumb-marine">
+                <img src="images/scene/scene-detail-marine.jpg" alt="" onerror="this.style.display='none'">
+            </div>
+            <h3>海洋海事 · AI大副</h3>
+            <p class="scene-value">岸基监测、水面巡检、水下感知，数据全程不出域</p>
+            <p class="scene-functions">岸基站监测 · 无人船巡检 · 水下设备感知</p>
+        </div>
+    </section>
+
+    <!-- 固定详情面板 -->
+    <section class="scenario-detail-panel">
+        <div class="detail-container">
+
+            <!-- 场景1：工业能源（默认激活） --> 
+     <div class="detail-view active" id="detail-industrial"> 
+       <div class="detail-layout detail-industrial">
+                    <div class="detail-visual">
+                        <div class="detail-thumb thumb-industrial">
+                            <img src="images/scene/scene-detail-industrial.jpg" alt="" onerror="this.style.display='none'">
+                        </div>
+                        <div class="capability-brief">
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>7×24 不间断监测</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>断网本地自治</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            <span>统一调度管理</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-tags">
+                            <span class="tag-pill tag-blue">工业检测</span>
+                            <span class="tag-pill tag-blue">智慧运维</span>
+                            <span class="tag-pill tag-blue">安防监控</span>
+                        </div>
+                        <h2 class="detail-title">工业能源 · 无人值守</h2>
+                        <p class="detail-subtitle" style="font-weight: 600; color: var(--accent-blue);">让高危现场的每一次异常都能被看见——从"人到现场"变成"AI在现场"。</p>
+                        <p class="tech-backing">依托MaM-GPT成熟商用实景智能方案，持续支持架构迭代优化</p>
+
+                        <div class="info-rows">
+                            <div class="info-row-top">
+                                <div class="info-card">
+                                    <h4>典型部署场景</h4>
+                                    <p>变电站设备状态监测、油气管道沿线巡检、制造车间安全合规、配电室无人值守、光伏电站巡检</p>
+                                </div>
+                                <div class="info-card">
+                                    <h4>场景价值</h4>
+                                    <ul class="value-list">
+                                        <li>秒级预警，替代人工巡检</li>
+                                        <li>异常识别，降低停机损失</li>
+                                        <li>本地闭环，满足合规审计</li>
+                                        <li>数据留痕，全链路可追溯</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="info-row-bottom">
+                                <div class="info-card">
+                                    <h4>解决方案能力</h4>
+                                    <ol class="solution-list">
+                                        <li><span class="solution-title">7×24小时视觉巡检</span><span class="solution-desc">通用视觉智能终端全天候识别设备状态、仪表读数与现场异常，无人区、夜间、恶劣天气下持续在岗。</span></li>
+                                        <li><span class="solution-title">秒级触发分级告警</span><span class="solution-desc">异常确认后秒级按等级推送告警，明确"什么事、在哪里、多紧急"，避免漏报，也避免告警泛滥。</span></li>
+                                        <li><span class="solution-title">智能报告自动生成</span><span class="solution-desc">巡检结果自动汇总为结构化报告，异常留痕、前后对比可追溯，直接对接运维与审计流程。</span></li>
+                                        <li><span class="solution-title">断网本地自治</span><span class="solution-desc">识别与分析全部在边缘侧完成，断网照常运行、数据不出厂区，满足能源行业安全合规要求。</span></li>
+                                        <li><span class="solution-title">多站点统一调度</span><span class="solution-desc">变电站、管线、厂区多节点统一接入，巡检规则集中配置，运行状态一屏统览。</span></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-products">
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#zn04'">AGI Box·通用视觉智能终端</span>
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#ultra'">AGI Box Ultra·边缘中枢</span>
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#cluster'">AGI Box·分布式边缘集群</span>
+                        </div>
+
+                        <p class="evidence-line">已规模化交付：国家电网等头部客户现场长期运行</p>
+
+                        <button class="detail-btn btn-blue" onclick="window.location.href='contact.html'">咨询定制方案 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场景2：商业全域 -->
+            <div class="detail-view" id="detail-commercial">
+                <div class="detail-layout detail-commercial">
+                    <div class="detail-visual">
+                        <div class="detail-thumb thumb-commercial">
+                            <img src="images/scene/scene-detail-commercial.jpg" alt="" onerror="this.style.display='none'">
+                        </div>
+                        <div class="capability-brief">
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>客流行为分析</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <span>安全风险预警</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            <span>多节点统一调度</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-tags">
+                            <span class="tag-pill tag-orange">商业门店</span>
+                            <span class="tag-pill tag-orange">仓储物流</span>
+                            <span class="tag-pill tag-orange">园区安防</span>
+                        </div>
+                        <h2 class="detail-title">连锁门店 · AI店长</h2>
+                        <p class="detail-subtitle" style="font-weight: 600; color: var(--accent-orange);">让连锁门店的标准化不再依赖人盯人——AI店长，7×24小时在岗。</p>
+                        <p class="tech-backing">依托MaM-GPT成熟商用实景智能方案，持续支持架构迭代优化</p>
+
+                        <div class="info-rows">
+                            <div class="info-row-top">
+                                <div class="info-card">
+                                    <h4>典型部署场景</h4>
+                                    <p>连锁门店客流分析、仓储物流安全管控、产业园区安防巡逻</p>
+                                </div>
+                                <div class="info-card">
+                                    <h4>场景价值</h4>
+                                    <ul class="value-list">
+                                        <li>客流与动线自动分析</li>
+                                        <li>安全风险主动预警</li>
+                                        <li>门店运营数据化</li>
+                                        <li>标准化规则统一执行</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="info-row-bottom">
+                                <div class="info-card">
+                                    <h4>解决方案能力</h4>
+                                    <ol class="solution-list">
+                                        <li><span class="solution-title">客流统计与行为分析</span><span class="solution-desc">自动统计进出客流、停留时长与动线热区，为排班、陈列和营销提供数据依据。</span></li>
+                                        <li><span class="solution-title">安全风险实时预警</span><span class="solution-desc">对烟火、摔倒、异常聚集等风险实时识别、主动预警，闭店后自动切换为无人值守模式。</span></li>
+                                        <li><span class="solution-title">多门店集中管控</span><span class="solution-desc">百家门店同一套标准：巡检规则与告警阈值总部统一配置，执行情况自动记录，标准化不再依赖人盯人。</span></li>
+                                        <li><span class="solution-title">数据本地闭环</span><span class="solution-desc">视频与分析结果全程在门店本地存储处理、不出店，满足商业场景的隐私与合规要求。</span></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-products">
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#zn04'">AGI Box·通用视觉智能终端</span>
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#ultra'">AGI Box Ultra·边缘中枢</span>
+                        </div>
+
+                        <p class="evidence-line">已规模化交付：咖啡连锁等品牌门店批量部署</p>
+
+                        <button class="detail-btn btn-blue" onclick="window.location.href='contact.html'">咨询定制方案 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场景3：文旅交互 -->
+            <div class="detail-view" id="detail-cultural">
+                <div class="detail-layout detail-cultural">
+                    <div class="detail-visual">
+                        <div class="detail-thumb thumb-cultural">
+                            <img src="images/scene/scene-detail-cultural.jpg" alt="" onerror="this.style.display='none'">
+                        </div>
+                        <div class="capability-brief">
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <span>多模态智能交互</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.828 14.828a4 4 0 0 1-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                            <span>AIGC 内容生成</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
+                            <span>专属 IP 定制</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-tags">
+                            <span class="tag-pill tag-purple">博物馆</span>
+                            <span class="tag-pill tag-purple">景区</span>
+                            <span class="tag-pill tag-purple">文化场馆</span>
+                        </div>
+                        <h2 class="detail-title">文旅文博 · AI陪伴智能体</h2>
+                        <p class="detail-subtitle" style="font-weight: 600; color: var(--accent-purple);">让文化IP拥有数字生命——与每一个用户建立长期、有温度的陪伴关系。</p>
+                        <p class="tech-backing">依托MaM-GPT成熟商用实景智能方案，持续支持架构迭代优化</p>
+
+                        <div class="info-rows">
+                            <div class="info-row-top">
+                                <div class="info-card">
+                                    <h4>典型部署场景</h4>
+                                    <p>博物馆智能导览、景区沉浸式讲解、文化场馆互动体验</p>
+                                </div>
+                                <div class="info-card">
+                                    <h4>场景价值</h4>
+                                    <ul class="value-list">
+                                        <li>7×24小时智能陪伴</li>
+                                        <li>文化IP专属交互体验</li>
+                                        <li>内容持续进化</li>
+                                        <li>从"功能"到"关系"的陪伴升级</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="info-row-bottom">
+                                <div class="info-card">
+                                    <h4>解决方案能力</h4>
+                                    <ol class="solution-list">
+                                        <li><span class="solution-title">多模态自然语言交互</span><span class="solution-desc">支持语音对话、展品问答与导览讲解，观众像和朋友聊天一样逛展。</span></li>
+                                        <li><span class="solution-title">AIGC专属内容生成</span><span class="solution-desc">一键生成祈福图、修行周历、每日金句等IP化图文内容，观众愿意带走、愿意分享。</span></li>
+                                        <li><span class="solution-title">品牌IP形象与知识库定制</span><span class="solution-desc">按场馆与文化IP定制形象、声音与知识体系，让智能体成为"活的IP"。</span></li>
+                                        <li><span class="solution-title">云端协同持续迭代</span><span class="solution-desc">内容与能力云端持续更新，部署后常用常新，无需二次开发。</span></li>
+                                        <li><span class="solution-title">三端记忆共享</span><span class="solution-desc">硬件、云端、微信三端记忆互通，观众离馆后仍可在微信中延续陪伴关系。</span></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-products">
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#yinian'">AGI Box·一念陪伴智能终端</span>
+                        </div>
+
+                        <button class="detail-btn btn-blue" onclick="window.location.href='contact.html'">咨询定制方案 →</button>
+                        <p class="compliance-note">「一念」为文旅场景定制 IP 演示案例，非自有标准化产品线，支持全行业 IP 定制。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场景4：海洋海事 -->
+            <div class="detail-view" id="detail-marine">
+                <div class="detail-layout detail-marine">
+                    <div class="detail-visual">
+                        <div class="detail-thumb thumb-marine">
+                            <img src="images/scene/scene-detail-marine.jpg" alt="" onerror="this.style.display='none'">
+                        </div>
+                        <div class="capability-brief">
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 12 15 15 12"/></svg>
+                            <span>多源数据解析</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>全场景适配部署</span>
+                          </div>
+                          <div class="cap-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>离岸独立运行</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-tags">
+                            <span class="tag-pill tag-green">岸基监测</span>
+                            <span class="tag-pill tag-green">水面巡检</span>
+                            <span class="tag-pill tag-green">水下感知</span>
+                        </div>
+                        <h2 class="detail-title">海洋海事 · AI大副</h2>
+                        <p class="detail-subtitle" style="font-weight: 600; color: var(--accent-green);">让每一位船长都有一位永不疲倦的AI大副——看懂海图，预判风险，护航安全。</p>
+                        <p class="tech-backing">依托MaM-GPT成熟商用实景智能方案，持续支持架构迭代优化</p>
+
+                        <div class="info-rows">
+                            <div class="info-row-top">
+                                <div class="info-card">
+                                    <h4>典型部署场景</h4>
+                                    <p>岸基站环境监测、无人船水面巡检、水下设备状态感知</p>
+                                </div>
+                                <div class="info-card">
+                                    <h4>场景价值</h4>
+                                    <ul class="value-list">
+                                        <li>全维度海洋环境实时感知</li>
+                                        <li>降低恶劣海况人工巡检风险</li>
+                                        <li>覆盖岸基、无人船、水下全空间</li>
+                                        <li>物理世界理解支撑科学决策</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="info-row-bottom">
+                                <div class="info-card">
+                                    <h4>解决方案能力</h4>
+                                    <ol class="solution-list">
+                                        <li><span class="solution-title">多源数据智能解析</span><span class="solution-desc">统一理解海图、水文、气象、声呐等多源数据，用自然语言即可查询海图与航行信息。</span></li>
+                                        <li><span class="solution-title">全场景适配部署</span><span class="solution-desc">同一套智能覆盖岸基站、无人船、浮标与水下设备，按场景灵活组合部署。</span></li>
+                                        <li><span class="solution-title">离岸断网独立运行</span><span class="solution-desc">依托边缘算力在远海断网环境独立运行，数据不出船、不出海域。</span></li>
+                                        <li><span class="solution-title">世界模型海洋深度理解</span><span class="solution-desc">基于MaM-GPT对物理世界的持续理解，辅助风险预判与航线决策，预览版已具备自主海图绘制能力。</span></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-products">
+                            <span class="product-tag clickable" onclick="window.location.href='investor-abyss.html'">深渊矩阵海洋终端体系</span>
+                            <span class="product-tag clickable" onclick="window.location.href='customer-agibox.html#cluster'">AGI Box·分布式边缘集群</span>
+                        </div>
+
+                        <button class="detail-btn btn-blue" onclick="window.location.href='contact.html'">咨询定制方案 →</button>
+                        <p style="margin-top:8px;">
+                          <a href="investor-abyss.html" style="color:#00B42A;font-size:12px;">了解海洋技术架构 →</a>
+                        </p>
+                        <br>
+                        <a href="investor-abyss.html" class="marine-more-link">如需了解海洋智能底层技术体系，可前往「深渊矩阵·海洋具身智能」页面查阅详情 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统一收束带 -->
+    <section class="closing-band">
+        <div class="closing-content">
+            <p class="closing-main">AGI Box已落地工业、能源、连锁门店、文旅、海洋五大场景——用同一个边缘AI大脑，生长出AI巡检员、AI店长、AI陪伴、AI大副。</p>
+            <p class="closing-sub">断网也能跑 · 数据不出域 · 7×24小时不休眠</p>
+            <button class="closing-btn btn-blue" onclick="window.location.href='contact.html'">咨询定制方案 →</button>
+        </div>
+    </section>
+
+    <footer id="footer" class="py-12 px-4" style="background: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <img id="footer-logo" src="images/logo.png" alt="云锦微VIITRIX" class="h-8 w-auto mb-4">
+                    <p class="text-sm" style="color: var(--text-muted);">让AI落地物理世界</p>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-4" style="color: var(--text-primary);">快速链接</h4>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">首页</a>
+                        <a href="investor-mamgpt.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">MaM-GPT 世界模型</a>
+                        <a href="investor-abyss.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">深渊矩阵</a>
+                        <a href="customer-agibox.html" class="block text-sm hover:text-[var(--text-primary)] transition-colors" style="color: var(--text-muted);">AGI Box</a>
+                    </div>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">© 2026 云锦微VIITRIX</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function switchScenario(sceneId) {
+            document.querySelectorAll('.scene-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelectorAll('.detail-view').forEach(detail => {
+                detail.classList.remove('active');
+            });
+
+            const activeCard = document.querySelector('.scene-card[data-scene="' + sceneId + '"]');
+            const activeDetail = document.getElementById('detail-' + sceneId);
+
+            if (activeCard) activeCard.classList.add('active');
+            if (activeDetail) {
+                activeDetail.classList.add('active');
+                activeDetail.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }
+        }
+
+        function scrollToContact() {
+            const contact = document.querySelector('.contact-section') || document.querySelector('footer');
+            if (contact) {
+                contact.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.location.href = '/contact.html';
+            }
+        }
+
+        let isLightTheme = false;
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            const body = document.body;
+            const navLogo = document.querySelector('nav img');
+            const footerLogo = document.getElementById('footer-logo');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const mobileThemeIconDark = document.getElementById('mobile-theme-icon-dark');
+            const mobileThemeIconLight = document.getElementById('mobile-theme-icon-light');
+            if (isLightTheme) {
+                body.classList.add('light-theme');
+                if (navLogo) navLogo.src = 'images/logo-white.png';
+                if (footerLogo) footerLogo.src = 'images/logo-white.png';
+                if (themeIconDark) themeIconDark.classList.add('hidden');
+                if (themeIconLight) themeIconLight.classList.remove('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.add('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.remove('hidden');
+            } else {
+                body.classList.remove('light-theme');
+                if (navLogo) navLogo.src = 'images/logo.png';
+                if (footerLogo) footerLogo.src = 'images/logo.png';
+                if (themeIconDark) themeIconDark.classList.remove('hidden');
+                if (themeIconLight) themeIconLight.classList.add('hidden');
+                if (mobileThemeIconDark) mobileThemeIconDark.classList.remove('hidden');
+                if (mobileThemeIconLight) mobileThemeIconLight.classList.add('hidden');
+            }
+            localStorage.setItem('viitrix-theme', isLightTheme ? 'light' : 'dark');
+        }
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('mobile-theme-toggle').addEventListener('click', toggleTheme);
+        const savedTheme = localStorage.getItem('viitrix-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
