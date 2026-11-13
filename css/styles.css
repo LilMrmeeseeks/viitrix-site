@@ -2575,3 +2575,17 @@ body.light-theme .hv-dots button.is-on {
 body.light-theme .demo-tab.is-active .tab-t {
     color: #b3401a;
 }
+/* ===== 手机首屏标题不再断字（2026-11-13 加，仅小屏生效） ===== */
+@media (max-width: 430px) {
+  .hero-title {
+    font-size: 30px;
+    line-height: 1.26;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+}
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: 28px;
+  }
+}
